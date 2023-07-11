@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!--헤푸찢-->
+    <script>
+        function includeHTML(callback) {
+            var z, i, elmnt, file, xhr;
+            /*loop through a collection of all HTML elements:*/
+            z = document.getElementsByTagName('*');
+            for (i = 0; i < z.length; i++) {
+                elmnt = z[i];
+                /*search for elements with a certain atrribute:*/
+                file = elmnt.getAttribute('include-html');
+                //console.log(file);
+                if (file) {
+                    /*make an HTTP request using the attribute value as the file name:*/
+                    xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (this.readyState == 4) {
+                            if (this.status == 200) {
+                                elmnt.innerHTML = this.responseText;
+                            }
+                            if (this.status == 404) {
+                                elmnt.innerHTML = 'Page not found.';
+                            }
+                            /*remove the attribute, and call this function once more:*/
+                            elmnt.removeAttribute('include-html');
+                            includeHTML(callback);
+                        }
+                    }
+                    xhr.open('GET', file, true);
+                    xhr.send();
+                    /*exit the function:*/
+                    return;
+                }
+            }
+            setTimeout(function () {
+                callback();
+            }, 0);
+        }
+    </script>
+    <!--    다크모드 구현-->
+    <script>
+        function toggleDarkMode() {
+            var body = document.body;
+            body.classList.toggle("dark-mode");
+
+            var button = document.getElementById("button");
+            var modeText = document.getElementById("modeText");
+
+            if (body.classList.contains("dark-mode")) {
+                localStorage.setItem("darkModeEnabled", "true");
+                modeText.innerHTML = "Light Mode";
+            } else {
+                localStorage.setItem("darkModeEnabled", "false");
+                modeText.innerHTML = "Dark Mode";
+            }
+        }
+
+        // Load dark mode setting on page load
+        window.onload = function () {
+            var darkModeEnabled = localStorage.getItem("darkModeEnabled");
+            if (darkModeEnabled === "true") {
+                document.body.classList.add("dark-mode");
+                document.getElementById("modeText").innerHTML = "Light Mode";
+            }
+        }
+
+        // Check if the user is logged in
+        function isLoggedIn() {
+            // Implement your own logic here to check if the user is logged in
+            // For example, you can check if a session variable is set or if a cookie is present
+            // Return true if the user is logged in, false otherwise
+            return false;
+        }
+
+        // Load dark mode setting and update navbar on page load
+        window.onload = function () {
+            var darkModeEnabled = localStorage.getItem("darkModeEnabled");
+            if (darkModeEnabled === "true") {
+                document.body.classList.add("dark-mode");
+                document.getElementById("modeText").innerHTML = "Light Mode";
+            }
+            updateNavbar();
+        }
+    </script>
+
+    <!--    서치 눌렀을 때 loading.gif 나오게 하는 스크립트 구현-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(function () {
+            $('form').submit(function (event) {
+                event.preventDefault(); // 기존 이벤트 동작 취소
+                var form = $(this);
+                var url = form.attr('action');
+                $('#content').fadeOut('slow', function () {
+                    $(this).html('<img src="/img/loading.gif" style="width: 100%; height: 100%; align-content: center" />').fadeIn('slow', function () {
+                        $.ajax({
+                            url: url,
+                            type: 'post',
+                            data: form.serialize(),
+                            success: function (data) {
+                                $(this).fadeOut('slow', function () {
+                                    $('#content').html(data).fadeIn('slow');
+                                });
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                console.error(errorThrown);
+                            }
+                        });
+                    });
+                });
+            });
+        });
+
+        $(function () {
+            // 오늘 날짜를 구합니다.
+            var today = new Date();
+            var year = today.getFullYear();
+            var month = today.getMonth() + 1;
+            var date = today.getDate();
+
+// 이번 달 1일의 날짜를 구합니다.
+            var firstDayOfMonth = new Date(year, month - 1, 1);
+
+// 만약 오늘이 이번 달의 1일이 아니라면,
+// 이번 달의 1일 이전의 날짜는 선택할 수 없도록 합니다.
+            if (date !== 1) {
+                var lastMonthDate = new Date(firstDayOfMonth - 1);
+                var lastMonthYear = lastMonthDate.getFullYear();
+                var lastMonthMonth = lastMonthDate.getMonth() + 1;
+                var lastMonthDay = lastMonthDate.getDate();
+                var lastMonthDateString = lastMonthYear + "-" + lastMonthMonth.toString().padStart(2, '0') + "-" + lastMonthDay.toString().padStart(2, '0');
+                document.getElementsByName("departureDate")[0].setAttribute("min", lastMonthDateString);
+            }
+        });
+    </script>
+    <style>
+        .section {
+            position: relative;
+            height: 100vh;
+        }
+
+        .section .section-center {
+            position: absolute;
+
+            left: 0;
+            right: 0;
+            -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+        }
+
+        #booking {
+            font-family: 'PT Sans', sans-serif;
+
+            background-size: cover;
+            background-position: center;
+        }
+
+        .booking-form {
+            background-image: url('/img/background.jpg');
+            padding: 40px;
+            border-radius: 6px;
+        }
+
+        .booking-form .form-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .booking-form .form-control {
+            background-color: #fff;
+            height: 50px;
+            color: #191a1e;
+            border: none;
+            font-size: 16px;
+            font-weight: 400;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            border-radius: 40px;
+            padding: 0px 25px;
+        }
+
+        .booking-form .form-control::-webkit-input-placeholder {
+            color: rgba(82, 82, 84, 0.4);
+        }
+
+        .booking-form .form-control:-ms-input-placeholder {
+            color: rgba(82, 82, 84, 0.4);
+        }
+
+        .booking-form .form-control::placeholder {
+            color: rgba(82, 82, 84, 0.4);
+        }
+
+        .booking-form input[type="date"].form-control:invalid {
+            color: rgba(82, 82, 84, 0.4);
+        }
+
+        .booking-form select.form-control {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .booking-form select.form-control + .select-arrow {
+            position: absolute;
+            right: 10px;
+            bottom: 6px;
+            width: 32px;
+            line-height: 32px;
+            height: 32px;
+            text-align: center;
+            pointer-events: none;
+            color: rgba(0, 0, 0, 0.3);
+            font-size: 14px;
+        }
+
+        .booking-form select.form-control + .select-arrow:after {
+            content: '\279C';
+            display: block;
+            -webkit-transform: rotate(90deg);
+            transform: rotate(90deg);
+        }
+
+        .booking-form .form-label {
+            display: block;
+            margin-left: 20px;
+            margin-bottom: 5px;
+            font-weight: 400;
+            text-transform: uppercase;
+            line-height: 24px;
+            height: 24px;
+            font-size: 12px;
+            color: #fff;
+        }
+
+        .booking-form .form-checkbox input {
+            position: absolute !important;
+            margin-left: -9999px !important;
+            visibility: hidden !important;
+        }
+
+        .booking-form .form-checkbox label {
+            position: relative;
+            padding-top: 4px;
+            padding-left: 30px;
+            font-weight: 400;
+            color: #fff;
+        }
+
+        .booking-form .form-checkbox label + label {
+            margin-left: 15px;
+        }
+
+        .booking-form .form-checkbox input + span {
+            position: absolute;
+            left: 2px;
+            top: 4px;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+        .booking-form .form-checkbox input + span:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0px;
+            height: 0px;
+            border-radius: 50%;
+            background-color: #f23e3e;
+            -webkit-transition: 0.2s all;
+            transition: 0.2s all;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        .booking-form .form-checkbox input:not(:checked) + span:after {
+            opacity: 0;
+        }
+
+        .booking-form .form-checkbox input:checked + span:after {
+            opacity: 1;
+            width: 10px;
+            height: 10px;
+        }
+
+        .booking-form .form-btn {
+            margin-top: 27px;
+        }
+
+        .booking-form .submit-btn {
+            color: #fff;
+            background-color: #f23e3e;
+            font-weight: 400;
+            height: 50px;
+            font-size: 14px;
+            border: none;
+            width: 100%;
+            border-radius: 40px;
+            text-transform: uppercase;
+            -webkit-transition: 0.2s all;
+            transition: 0.2s all;
+        }
+
+        .booking-form .submit-btn:hover,
+        .booking-form .submit-btn:focus {
+            opacity: 0.9;
+        }
+
+        .dark-mode {
+            background-color: #2a2a2a;
+            color: white;
+        }
+
+        .loader {
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes spin {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        /* loading.gif 위치 지정 */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+        }
+
+        .loading img {
+            width: 50px;
+            height: 50px;
+        }
+        
+         .dark-mode {
+	background-color: #2a2a2a;
+	color: white;
+}
+
+button {
+	background-color: #212529;
+	color: #fff;
+	padding: 10px 20px;
+	border-radius: 5px;
+	border: none;
+	cursor: pointer;
+	transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+	background-color: #343a40;
+}
+    </style>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <title>Booking Form HTML Template</title>
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+            crossorigin="anonymous">
+
+
+    <link href="/docs/5.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+          crossorigin="anonymous">
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans:400" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link type="text/css" rel="stylesheet" href="../css/bootstrap.min.css"/>
+
+    <!-- Custom stlylesheet -->
+    <link type="text/css" rel="stylesheet" href="../css/style.css"/>
+
+
+</head>
+
+<body>
+
+<header include-html="/html/header.html" style="margin-bottom: 0px"></header>
+
+<main>
+    <div id="content">
+        <div>
+            <div id="booking" class="section">
+                <div class="section-center">
+                    <div class="container">
+                    
+                    <button onclick="openPopup()">내 예약정보 검색</button>
+					
+					<script>
+					function openPopup() {
+					  const width = 500;
+					  const height = 400;
+					  const url = "/whitelabel/search";
+					  const popup = window.open(url, "Search Reservation", "width=500,height=500");
+					  popup.focus();
+					}
+					</script>
+					<br>
+					<br>
+                        <div class="row">
+                            <div class="booking-form">
+                                <form th:action="@{/whitelabel/skyResult}" method="post">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <span class="form-label">출발 대륙</span>
+                                                <select class="form-control" id="continent" name="continent"
+                                                        onchange="showSelectedRegion()">
+                                                    <!--                                        <select id="continent" name="continent" onchange="showSelectedRegion()">-->
+                                                    <option value="">-- 선택 --</option>
+                                                    <option value="asia">아시아</option>
+                                                    <option value="africa">아프리카</option>
+                                                    <option value="north_america">북아메리카</option>
+                                                    <option value="south_america">남아메리카</option>
+                                                    <option value="europe">유럽</option>
+                                                    <option value="oceania">오세아니아</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <span class="form-label">출발 도시</span>
+                                                <select class="form-control" id="origin" name="origin" disabled>
+                                                    <option value="">대륙 선</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <span class="form-label">도착 대륙</span>
+                                                <select class="form-control" id="continent2" name="continent2"
+                                                        onchange="showSelectedRegion2()">
+                                                    <option value="">-- 선택 --</option>
+                                                    <option value="asia">아시아</option>
+                                                    <option value="africa">아프리카</option>
+                                                    <option value="north_america">북아메리카</option>
+                                                    <option value="south_america">남아메리카</option>
+                                                    <option value="europe">유럽</option>
+                                                    <option value="oceania">오세아니아</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <span class="form-label">도착 도시</span>
+                                                <select class="form-control" id="destination" name="destination"
+                                                        placeholder="City or airport" disabled>
+                                                    <option value="">대륙 선</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <span class="form-label">고고씌잉</span>
+                                                <input class="form-control" type="date" name="departureDate" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <span class="form-label">탑승 인원</span>
+                                                <input class="form-control" id="adults" type="number" name="adults"
+                                                       min="1"
+                                                       max="8" value="1" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <span class="form-label">Travel class</span>
+                                                <select class="form-control" id="cabinClass" name="cabinClass">
+                                                    <option value="economy">Economy class</option>
+                                                    <option value="business">Business class</option>
+                                                    <option value="first">First class</option>
+                                                </select>
+                                                <span class="select-arrow"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-btn">
+                                                <button class="submit-btn" type="submit">검색하기</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <script type="text/javascript">
+
+                                    function showSelectedRegion() {
+                                        const selectBox = document.getElementById("continent");
+                                        const selectedValue = selectBox.options[selectBox.selectedIndex].value;
+                                        let region = "";
+
+                                        switch (selectedValue) {
+                                            case "asia":
+                                                region = "<option value='KIX'>도쿄</option><option value='ICN'>서울</option><option value='PEK'>베이징</option><option value='PDG'>상해</option><option value='HKG'>홍콩</option><option value='BKK'>방콕</option>";
+                                                break;
+                                            case "africa":
+                                                region = "<option value='JNB'>요하네스버그</option><option value='CAI'>카이로</option><option value='LOS'>라고스</option><option value='NBO'>나이로비</option>";
+                                                break;
+                                            case "north_america":
+                                                region = "<option value='ATL'>애틀랜타</option><option value='BOS'>보스턴</option><option value='ORD'>시카고</option><option value='LAX'>로스엔젤레스</option><option value='MIA'>마이애미</option><option value='JFK'>뉴욕</option><option value='SEA'>시애틀</option><option value='san_francisco'>샌프란시스코</option>";
+                                                break;
+                                            case "south_america":
+                                                region = "<option value='BSB'>브라질리아</option><option value='AEP'>부에노스아이레스</option><option value='LIM'>리마</option><option value='MEX'>멕시코시티</option>";
+                                                break;
+                                            case "europe":
+                                                region = "<option value='HSR'>런던</option><option value='CDG'>파리</option><option value='BER'>베를린</option><option value='FCO'>로마</option><option value='ATH'>아테네</option>";
+                                                break;
+                                            case "oceania":
+                                                region = "<option value='SYD'>시드니</option><option value='MEL'>멜버른</option><option value='BNE'>퀸즐랜드</option>";
+                                                break;
+                                            default:
+                                                region = "<option value=''>-- 선택 --</option>";
+                                        }
+
+                                        document.getElementById("origin").innerHTML = region;
+                                        document.getElementById("origin").disabled = false;
+                                    }
+
+                                    function showSelectedRegion2() {
+                                        const selectBox = document.getElementById("continent2");
+                                        const selectedValue = selectBox.options[selectBox.selectedIndex].value;
+                                        let region = "";
+
+                                        switch (selectedValue) {
+                                            case "asia":
+                                                region = "<option value='KIX'>도쿄</option><option value='ICN'>서울</option><option value='PEK'>베이징</option><option value='PDG'>상해</option><option value='HKG'>홍콩</option><option value='BKK'>방콕</option>";
+                                                break;
+                                            case "africa":
+                                                region = "<option value='JNB'>요하네스버그</option><option value='CAI'>카이로</option><option value='LOS'>라고스</option><option value='NBO'>나이로비</option>";
+                                                break;
+                                            case "north_america":
+                                                region = "<option value='ATL'>애틀랜타</option><option value='BOS'>보스턴</option><option value='ORD'>시카고</option><option value='LAX'>로스엔젤레스</option><option value='MIA'>마이애미</option><option value='JFK'>뉴욕</option><option value='SEA'>시애틀</option><option value='san_francisco'>샌프란시스코</option>";
+                                                break;
+                                            case "south_america":
+                                                region = "<option value='BSB'>브라질리아</option><option value='AEP'>부에노스아이레스</option><option value='LIM'>리마</option><option value='MEX'>멕시코시티</option>";
+                                                break;
+                                            case "europe":
+                                                region = "<option value='HSR'>런던</option><option value='CDG'>파리</option><option value='BER'>베를린</option><option value='FCO'>로마</option><option value='ATH'>아테네</option>";
+                                                break;
+                                            case "oceania":
+                                                region = "<option value='SYD'>시드니</option><option value='MEL'>멜버른</option><option value='BNE'>퀸즐랜드</option>";
+                                                break;
+                                            default:
+                                                region = "<option value=''>-- 선택 --</option>";
+                                        }
+
+                                        document.getElementById("destination").innerHTML = region;
+                                        document.getElementById("destination").disabled = false;
+                                    }
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    				
+</main>
+
+
+<footer include-html="/html/footer.html"></footer>
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+<!--로그인 후 로그아웃으로 바뀌는 스크립트-->
+
+<!-- 헤푸찢 세트-->
+<script>
+   includeHTML(function () {
+      includeRouter(function () {
+         // do something in the future
+      });
+   });
+</script>
+</html>

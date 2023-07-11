@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+<header include-html="/html/header.html"></header>
+  <!--    서치 눌렀을 때 loading.gif 나오게 하는 스크립트 구현-->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(function () {
+      $('form').submit(function (event) {
+        event.preventDefault(); // 기존 이벤트 동작 취소
+        var form = $(this);
+        var url = form.attr('action');
+        $('#content').fadeOut('slow', function () {
+          $(this).html('<img src="/img/loading3.gif" style="width: 800px; height: 800px; align-content: center; display: block; margin: auto;" />').fadeIn('slow', function () {
+            $.ajax({
+              url: url,
+              type: 'post',
+              data: form.serialize(),
+              success: function (data) {
+                $(this).fadeOut('slow', function () {
+                  $('#content').html(data).fadeIn('slow');
+                });
+              },
+              error: function (jqXHR, textStatus, errorThrown) {
+                console.error(errorThrown);
+              }
+            });
+          });
+        });
+      });
+    });
+  </script>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhiteLabel</title>
+
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+
+  <style>
+    label{
+      color: darkgray;
+    }
+
+    .dark-mode {
+      background-color: #2a2a2a;
+      color: white;
+    }
+
+    button {
+      background-color: #212529;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+    }
+
+    button:hover {
+      background-color: #343a40;
+    }
+
+    body {
+      min-height: 100vh;
+      background: -webkit-gradient(linear, left bottom, right top, from(#4c5053));
+      background: -webkit-linear-gradient(bottom left,#4c5053 0%, #4c5053 100%);
+      background: -moz-linear-gradient(bottom left,#4c5053 0%, #4c5053 100%);
+      background: -o-linear-gradient(bottom left,#4c5053 0%, #4c5053 100%);
+      background: linear-gradient(to top right,#4c5053 0%, #4c5053 100%);
+    }
+
+    .input-form {
+      max-width: 680px;
+      margin-top: 80px;
+      padding: 32px;
+      background: #fff;
+      -webkit-border-radius: 10px;
+      -moz-border-radius: 10px;
+      border-radius: 10px;
+      -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+      -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+      box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15)
+    }
+  </style>
+
+</head>
+
+<body>
+
+<div id="content">
+
+<input type="hidden" id="encPswd" name="encPswd" value="">
+<div class="container" >
+  <div class="input-form-backgroud row">
+    <div class="input-form col-md-12 mx-auto">
+      <a href="/whitelabel/index"  class="navbar-brand d-flex align-items-center">
+        <strong>WhiteLabelSurvey</strong>
+      </a>
+      <h4 style="color: #4c5053;" class="mb-3">글 작성을 위해 키워드를 입력해 주세요</h4>
+      <form action="/whitelabel/register2"  method="post"
+            class="validation-form">
+        <input type="hidden" name="csrf" value="{{csrf.token}}">
+        <div class="form-group">
+          <div class="form-group">
+            <label for="loginId">음식점 이름</label> <input type="text"
+                                                       id="k1"  name="k1" class="form-control"
+                                                       placeholder="음식점명 작성해주세요"  required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label >음식 이름</label> <input type="text"
+                                       class="form-control"   id="k2"  name="k2"
+                                       placeholder="예) 짜장면" required>
+        </div>
+        <div class="form-group">
+          <label for="password">음식 종류</label> <input type="text"
+                                                     class="form-control"  id="k3"  name="k3"
+                                                     placeholder="예) 양식 or 중식" required>
+        </div>
+        <div class="form-group">
+          <label for="password">가격</label> <input type="text"
+                                                  class="form-control"  id="k4"  name="k4"
+                                                  placeholder="예) 비싸다 or 그냥 그렇다 or 저렴하다" required>
+        </div>
+        <div class="form-group">
+          <label for="password">분위기</label> <input type="text"
+                                                   class="form-control"  id="k5"  name="k5"
+                                                   placeholder="예) 조용하고 분위기 있다 " required>
+        </div>
+        <div class="form-group">
+          <label for="password">최종감상평</label> <input type="text"
+                                                     class="form-control"   id="k6"  name="k6"
+                                                     placeholder="예) 이 집  강력 추천 합니다 " required>
+        </div>
+
+
+
+        <div class="mb-4"></div>
+        <button class="btn btn-primary btn-lg btn-block" style="background-color: #4c5053" type="submit">제출</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+</div>
+<footer include-html="/html/footer.html"></footer>
+</body>
+<!-- 헤푸찢 세트-->
+<script>
+  includeHTML(function () {
+    includeRouter(function () {
+      // do something in the future
+    });
+  });
+</script>
+
+</html>

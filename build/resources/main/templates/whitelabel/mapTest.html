@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>WhiteLabel</title>
+</head>
+<body>
+	<div id="map" style="width: 500px; height: 400px;">
+		<script type="text/javascript"
+			src="//dapi.kakao.com/v2/maps/sdk.js?appkey=265e86e1135aa4e9e976471d64ee3d7c">
+			
+		</script>
+		<script>
+			// URL에서 lat와 lon 값을 추출하여 저장합니다.
+			const urlParams = new URLSearchParams(window.location.search);
+			const lat = urlParams.get('lat');
+			const lon = urlParams.get('lon');
+
+			// 지도를 표시하기 위한 코드입니다.
+			const container = document.getElementById('map');
+			const options = {
+				center : new kakao.maps.LatLng(lat, lon),
+				level : 3,
+			};
+			const map = new kakao.maps.Map(container, options);
+
+			const makerPosition = new kakao.maps.LatLng(lat, lon);
+
+			const marker = new kakao.maps.Marker({
+				position : makerPosition
+			});
+
+			marker.setMap(map);
+		</script>
+	</div>
+</body>
+</html>
