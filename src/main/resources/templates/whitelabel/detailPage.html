@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<!--헤푸찢-->
+   <script>
+      function includeHTML(callback) {
+         var z, i, elmnt, file, xhr;
+         /*loop through a collection of all HTML elements:*/
+         z = document.getElementsByTagName('*');
+         for (i = 0; i < z.length; i++) {
+            elmnt = z[i];
+            /*search for elements with a certain atrribute:*/
+            file = elmnt.getAttribute('include-html');
+            //console.log(file);
+            if (file) {
+               /*make an HTTP request using the attribute value as the file name:*/
+               xhr = new XMLHttpRequest();
+               xhr.onreadystatechange = function () {
+                  if (this.readyState == 4) {
+                     if (this.status == 200) {
+                        elmnt.innerHTML = this.responseText;
+                     }
+                     if (this.status == 404) {
+                        elmnt.innerHTML = 'Page not found.';
+                     }
+                     /*remove the attribute, and call this function once more:*/
+                     elmnt.removeAttribute('include-html');
+                     includeHTML(callback);
+                  }
+               }
+               xhr.open('GET', file, true);
+               xhr.send();
+               /*exit the function:*/
+               return;
+            }
+         }
+         setTimeout(function () {
+            callback();
+         }, 0);
+      }
+   </script>
+
+	<!--    다크모드 구현-->
+    <script>
+        function toggleDarkMode() {
+            var body = document.body;
+            body.classList.toggle("dark-mode");
+
+            var button = document.getElementById("button");
+            var modeText = document.getElementById("modeText");
+
+            if (body.classList.contains("dark-mode")) {
+                localStorage.setItem("darkModeEnabled", "true");
+                modeText.innerHTML = "Light Mode";
+            } else {
+                localStorage.setItem("darkModeEnabled", "false");
+                modeText.innerHTML = "Dark Mode";
+            }
+        }
+
+        // Load dark mode setting on page load
+        window.onload = function () {
+            var darkModeEnabled = localStorage.getItem("darkModeEnabled");
+            if (darkModeEnabled === "true") {
+                document.body.classList.add("dark-mode");
+                document.getElementById("modeText").innerHTML = "Light Mode";
+            }
+        }
+
+        // Check if the user is logged in
+        function isLoggedIn() {
+            // Implement your own logic here to check if the user is logged in
+            // For example, you can check if a session variable is set or if a cookie is present
+            // Return true if the user is logged in, false otherwise
+            return false;
+        }
+
+        // Load dark mode setting and update navbar on page load
+        window.onload = function () {
+            var darkModeEnabled = localStorage.getItem("darkModeEnabled");
+            if (darkModeEnabled === "true") {
+                document.body.classList.add("dark-mode");
+                document.getElementById("modeText").innerHTML = "Light Mode";
+            }
+            updateNavbar();
+        }
+    </script>
+
+
+
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author"
+	content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+<meta name="generator" content="Hugo 0.108.0">
+<title>WhiteLabelSurvey</title>
+
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+	crossorigin="anonymous">
+
+
+<link href="/docs/5.3/dist/css/bootstrap.min.css" rel="stylesheet"
+	integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+	crossorigin="anonymous">
+
+<!-- Favicons -->
+<link rel="apple-touch-icon"
+	href="/docs/5.3/assets/img/favicons/apple-touch-icon.png"
+	sizes="180x180">
+<link rel="icon" href="/docs/5.3/assets/img/favicons/favicon-32x32.png"
+	sizes="32x32" type="image/png">
+<link rel="icon" href="/docs/5.3/assets/img/favicons/favicon-16x16.png"
+	sizes="16x16" type="image/png">
+<link rel="manifest" href="/docs/5.3/assets/img/favicons/manifest.json">
+<link rel="mask-icon"
+	href="/docs/5.3/assets/img/favicons/safari-pinned-tab.svg"
+	color="#712cf9">
+<link rel="icon" href="/docs/5.3/assets/img/favicons/favicon.ico">
+<meta name="theme-color" content="#712cf9">
+
+
+<style>
+.bd-placeholder-img {
+	font-size: 1.125rem;
+	text-anchor: middle;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+}
+
+@media ( min-width : 768px) {
+	.bd-placeholder-img-lg {
+		font-size: 3.5rem;
+	}
+}
+
+.b-example-divider {
+	height: 3rem;
+	background-color: rgba(0, 0, 0, .1);
+	border: solid rgba(0, 0, 0, .15);
+	border-width: 1px 0;
+	box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em
+		rgba(0, 0, 0, .15);
+}
+
+.b-example-vr {
+	flex-shrink: 0;
+	width: 1.5rem;
+	height: 100vh;
+}
+
+.bi {
+	vertical-align: -.125em;
+	fill: currentColor;
+}
+
+.nav-scroller {
+	position: relative;
+	z-index: 2;
+	height: 2.75rem;
+	overflow-y: hidden;
+}
+
+.nav-scroller .nav {
+	display: flex;
+	flex-wrap: nowrap;
+	padding-bottom: 1rem;
+	margin-top: -1px;
+	overflow-x: auto;
+	text-align: center;
+	white-space: nowrap;
+	-webkit-overflow-scrolling: touch;
+}
+
+.collapse-menu {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between; /* center 대신 space-between 사용 */
+	align-items: center;
+	gap: 10px;
+}
+
+.collapse-item {
+	flex-basis: calc(20% - 10px); /* 20%에 gap 값을 빼서 5개씩 나오게 설정 */
+	display: block;
+	margin-bottom: 10px;
+	/* margin을 bottom으로만 주어 각각의 collapse-item 사이에 공백을 만듦 */
+	padding: 5px;
+	color: #555;
+	text-decoration: none;
+	border: 1px solid #ccc;
+	border-radius: 10px;
+	transition: background-color 0.3s ease;
+	text-align: center;
+}
+
+.collapse-item:hover {
+	background-color: #f7f7f7;
+}
+
+      .dark-mode {
+	background-color: #2a2a2a;
+	color: white;
+}
+
+button {
+	background-color: #212529;
+	color: #fff;
+	padding: 10px 20px;
+	border-radius: 5px;
+	border: none;
+	cursor: pointer;
+	transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+	background-color: #343a40;
+}
+</style>
+
+
+</head>
+<body>
+<header include-html="/html/header.html"></header>
+	
+	<main>
+
+		<section class="py-5 text-center container">
+			<div class="row py-lg-5">
+				<div class="col-lg-6 col-md-8 mx-auto">
+					<h1 class="fw-light">WHITELABELSURVEY</h1>
+					<p class="fw-light">세상의 모든 추천. 어떤 것을 찾고 싶으신가요?</p>
+					<p>
+					</p>
+				</div>
+			</div>
+		</section>
+		<section class="py-5 text-center container">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6">
+						<form action = "/whitelabel/detailPage" method = "post">
+							<input type = "date" id = "search" name = "search" placeholder="일자를 입력하세요"></input>
+							<button type = "submit"> 요청 </button>
+						</form>
+						<div th:each="dto : ${getmovieAPI}" th:if="${dto == null}">
+							<script>
+								alert("해당일자의 일별 BoxOffice 정보가 아직 없습니다.");
+								window.location.href = '/whitelabel/redirect';
+							</script>
+						</div>
+						<div th:each="dto : ${getmovieAPI}"  class="col">
+							<div class="card shadow-sm" th:width="300">
+								<div class="card-body">
+									<img class="align-self-center mr-3" th:src="${dto.image}"
+										alt="Movie Poster">
+									<h1 style="color: black;">[[${dto.rank}]]위 </h1> <h3 class="card-title" style="color: black;" th:text="${dto.movieNm}"></h3>
+									<span class="card-text" style="color: black;" th:text="'개 봉 일 : ' +  ${dto.openDt}"></span><br>
+									<span class="card-text"  style="color: black;" th:text="'매 출 액 : ' +  ${dto.salesAmt}"></span><br>
+									<span class="card-text" style="color: black;" th:text="'누적매출액 : ' + ${dto.salesAcc}"></span><br>
+									<div class="d-flex justify-content-between align-items-center">
+										<small class="text-muted"></small>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+					<div class="col-md-6">
+						<form action="/whitelabel/naverSearch" method="get" th:object="${dto}">
+							<div class="input-group" style="position: fixed; width: 371px;">
+								<input type="text" id="search" name="search"
+									class="form-control" placeholder="(영화) 검색어를 입력하세요" /> 
+									<span class="input-group-btn">
+									<button type="submit">검색</button>
+								</span>
+							</div>
+						</form>
+												
+						 
+						
+						<div th:if="${#lists.isEmpty(getMovieAPI)}">
+						</div>
+						<div th:if="getMovieAPI != null" th:each="dto : ${getMovieAPI}"
+							class="media">
+							<img class="align-self-center mr-3" th:src="${dto.image}"
+								alt="Movie Poster">
+							<div class="media-body">
+								<h5 class="mt-0" th:text="${dto.title}"></h5>
+								<a th:href="'https://movie.naver.com/movie/bi/mi/basic.nhn?code=' + ${dto.link}">상세보기</a>
+								<p class="mb-0" th:text="'Directed by ' + ${dto.director}"></p>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+
+			</div>
+</section>
+	</main>
+
+	<footer include-html="/html/footer.html"></footer>
+
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+		crossorigin="anonymous"></script>
+</body>
+<!-- 헤푸찢 세트-->
+<script>
+   includeHTML(function () {
+      includeRouter(function () {
+         // do something in the future
+      });
+   });
+</script>
+</html>
+

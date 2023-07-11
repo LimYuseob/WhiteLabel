@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<!--헤푸찢-->
+   <script>
+      function includeHTML(callback) {
+         var z, i, elmnt, file, xhr;
+         /*loop through a collection of all HTML elements:*/
+         z = document.getElementsByTagName('*');
+         for (i = 0; i < z.length; i++) {
+            elmnt = z[i];
+            /*search for elements with a certain atrribute:*/
+            file = elmnt.getAttribute('include-html');
+            //console.log(file);
+            if (file) {
+               /*make an HTTP request using the attribute value as the file name:*/
+               xhr = new XMLHttpRequest();
+               xhr.onreadystatechange = function () {
+                  if (this.readyState == 4) {
+                     if (this.status == 200) {
+                        elmnt.innerHTML = this.responseText;
+                     }
+                     if (this.status == 404) {
+                        elmnt.innerHTML = 'Page not found.';
+                     }
+                     /*remove the attribute, and call this function once more:*/
+                     elmnt.removeAttribute('include-html');
+                     includeHTML(callback);
+                  }
+               }
+               xhr.open('GET', file, true);
+               xhr.send();
+               /*exit the function:*/
+               return;
+            }
+         }
+         setTimeout(function () {
+            callback();
+         }, 0);
+      }
+   </script>
+
+	<!--    다크모드 구현-->
+    <script>
+        function toggleDarkMode() {
+            var body = document.body;
+            body.classList.toggle("dark-mode");
+
+            var button = document.getElementById("button");
+            var modeText = document.getElementById("modeText");
+
+            if (body.classList.contains("dark-mode")) {
+                localStorage.setItem("darkModeEnabled", "true");
+                modeText.innerHTML = "Light Mode";
+            } else {
+                localStorage.setItem("darkModeEnabled", "false");
+                modeText.innerHTML = "Dark Mode";
+            }
+        }
+
+        // Load dark mode setting on page load
+        window.onload = function () {
+            var darkModeEnabled = localStorage.getItem("darkModeEnabled");
+            if (darkModeEnabled === "true") {
+                document.body.classList.add("dark-mode");
+                document.getElementById("modeText").innerHTML = "Light Mode";
+            }
+        }
+
+        // Check if the user is logged in
+        function isLoggedIn() {
+            // Implement your own logic here to check if the user is logged in
+            // For example, you can check if a session variable is set or if a cookie is present
+            // Return true if the user is logged in, false otherwise
+            return false;
+        }
+
+        // Load dark mode setting and update navbar on page load
+        window.onload = function () {
+            var darkModeEnabled = localStorage.getItem("darkModeEnabled");
+            if (darkModeEnabled === "true") {
+                document.body.classList.add("dark-mode");
+                document.getElementById("modeText").innerHTML = "Light Mode";
+            }
+            updateNavbar();
+        }
+    </script>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author"
+	content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+<meta name="generator" content="Hugo 0.108.0">
+<title>WhiteLabelSurvey</title>
+
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+	crossorigin="anonymous">
+
+
+<link href="/docs/5.3/dist/css/bootstrap.min.css" rel="stylesheet"
+	integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+	crossorigin="anonymous">
+
+
+
+<style>
+
+.dark-mode {
+	background-color: #2a2a2a;
+	color: white;
+}
+
+button {
+	background-color: #212529;
+	color: #fff;
+	padding: 10px 20px;
+	border-radius: 5px;
+	border: none;
+	cursor: pointer;
+	transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+	background-color: #343a40;
+}
+
+.bd-placeholder-img {
+	font-size: 1.125rem;
+	text-anchor: middle;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+}
+
+@media ( min-width : 768px) {
+	.bd-placeholder-img-lg {
+		font-size: 3.5rem;
+	}
+}
+
+.b-example-divider {
+	height: 3rem;
+	background-color: rgba(0, 0, 0, .1);
+	border: solid rgba(0, 0, 0, .15);
+	border-width: 1px 0;
+	box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em
+		rgba(0, 0, 0, .15);
+}
+
+.b-example-vr {
+	flex-shrink: 0;
+	width: 1.5rem;
+	height: 100vh;
+}
+
+.bi {
+	vertical-align: -.125em;
+	fill: currentColor;
+}
+
+.nav-scroller {
+	position: relative;
+	z-index: 2;
+	height: 2.75rem;
+	overflow-y: hidden;
+}
+
+.nav-scroller .nav {
+	display: flex;
+	flex-wrap: nowrap;
+	padding-bottom: 1rem;
+	margin-top: -1px;
+	overflow-x: auto;
+	text-align: center;
+	white-space: nowrap;
+	-webkit-overflow-scrolling: touch;
+}
+
+.collapse-menu {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between; /* center 대신 space-between 사용 */
+	align-items: center;
+	gap: 10px;
+}
+
+.collapse-item {
+	flex-basis: calc(20% - 10px); /* 20%에 gap 값을 빼서 5개씩 나오게 설정 */
+	display: block;
+	margin-bottom: 10px;
+	/* margin을 bottom으로만 주어 각각의 collapse-item 사이에 공백을 만듦 */
+	padding: 5px;
+	color: #555;
+	text-decoration: none;
+	border: 1px solid #ccc;
+	border-radius: 10px;
+	transition: background-color 0.3s ease;
+	text-align: center;
+}
+
+.collapse-item:hover {
+	background-color: #f7f7f7;
+}
+
+.card shadow-sm {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.card {
+  width: 300px;
+  height: 200px;
+  background-color: white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.card:hover {
+  transform: translate(5px, -5px);
+}
+
+.card-body {
+  padding: 10px;
+  height: 100%;
+}
+
+.card-body p {
+  margin: 0;
+}
+
+</style>
+</head>
+<body>
+
+<header include-html="/html/header.html"></header>
+<main>
+
+    <section class="py-5 text-center container">
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="fw-light">WHITELABELSURVEY</h1>
+                <p class="fw-light">세상의 모든 추천. 어떤 것을 찾고 싶으신가요?</p>
+                <p>
+                </p>
+            </div>
+        </div>
+    </section>
+	<div class="container">
+		<label style="color: darkgray;">제목</label>
+		<h1 class="mt-4" style="color: darkgray;" th:text="${dto.title}"></h1>
+
+		<div class="form-group">
+		<input type="hidden" class="form-control" name="bno" th:value="${dto.bno}" readonly="readonly">
+		</div>
+		<div class="form-group">
+		<br>
+			<label style="color: darkgray;">내용</label>
+			<textarea class="form-control" rows="15" name="content" readonly>[[${dto.content}]]</textarea>
+		</div>
+		<div class="form-group">
+			<label style="color: darkgray;">작성자</label> <input type="text" class="form-control"
+				name="loginId" th:value="${dto.loginId}" readonly>
+		</div>
+		<br>
+
+		<a th:href="@{/whitelabel/modify(bno = ${dto.bno}, page=${requestDTO.page})}">
+			<button	type="button" class="btn btn-primary">글수정</button></a>
+			
+		<a th:href="@{/whitelabel/board(page=${requestDTO.page})}">
+			<button	type="button" class="btn btn-info">글목록</button></a>
+		<p class="text-mute">* 글 작성자만 수정가능합니다.</p>
+	<div>
+	<br>	
+  	<hr>
+</div>
+
+
+		</div>
+</main>		
+<footer include-html="/html/footer.html"></footer>
+</body>
+<!-- 헤푸찢 세트-->
+<script>
+   includeHTML(function () {
+      includeRouter(function () {
+         // do something in the future
+      });
+   });
+</script>
+
+</html>	
+
+
+

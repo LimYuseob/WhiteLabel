@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author"
+	content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+<meta name="generator" content="Hugo 0.108.0">
+<title>WhiteLabelSurvey</title>
+
+<link rel="stylesheet" href="/css/style.css">
+
+<!--헤푸찢-->
+   <script>
+      function includeHTML(callback) {
+         var z, i, elmnt, file, xhr;
+         /*loop through a collection of all HTML elements:*/
+         z = document.getElementsByTagName('*');
+         for (i = 0; i < z.length; i++) {
+            elmnt = z[i];
+            /*search for elements with a certain atrribute:*/
+            file = elmnt.getAttribute('include-html');
+            //console.log(file);
+            if (file) {
+               /*make an HTTP request using the attribute value as the file name:*/
+               xhr = new XMLHttpRequest();
+               xhr.onreadystatechange = function () {
+                  if (this.readyState == 4) {
+                     if (this.status == 200) {
+                        elmnt.innerHTML = this.responseText;
+                     }
+                     if (this.status == 404) {
+                        elmnt.innerHTML = 'Page not found.';
+                     }
+                     /*remove the attribute, and call this function once more:*/
+                     elmnt.removeAttribute('include-html');
+                     includeHTML(callback);
+                  }
+               }
+               xhr.open('GET', file, true);
+               xhr.send();
+               /*exit the function:*/
+               return;
+            }
+         }
+         setTimeout(function () {
+            callback();
+         }, 0);
+      }
+   </script>
+   <!--    다크모드 구현-->
+    <script>
+        function toggleDarkMode() {
+            var body = document.body;
+            body.classList.toggle("dark-mode");
+
+            var button = document.getElementById("button");
+            var modeText = document.getElementById("modeText");
+
+            if (body.classList.contains("dark-mode")) {
+                localStorage.setItem("darkModeEnabled", "true");
+                modeText.innerHTML = "Light Mode";
+            } else {
+                localStorage.setItem("darkModeEnabled", "false");
+                modeText.innerHTML = "Dark Mode";
+            }
+        }
+
+        // Load dark mode setting on page load
+        window.onload = function () {
+            var darkModeEnabled = localStorage.getItem("darkModeEnabled");
+            if (darkModeEnabled === "true") {
+                document.body.classList.add("dark-mode");
+                document.getElementById("modeText").innerHTML = "Light Mode";
+            }
+        }
+
+        // Check if the user is logged in
+        function isLoggedIn() {
+            // Implement your own logic here to check if the user is logged in
+            // For example, you can check if a session variable is set or if a cookie is present
+            // Return true if the user is logged in, false otherwise
+            return false;
+        }
+
+        // Load dark mode setting and update navbar on page load
+        window.onload = function () {
+            var darkModeEnabled = localStorage.getItem("darkModeEnabled");
+            if (darkModeEnabled === "true") {
+                document.body.classList.add("dark-mode");
+                document.getElementById("modeText").innerHTML = "Light Mode";
+            }
+            updateNavbar();
+        }
+    </script>
+<style type="text/css">
+ .dark-mode {
+	background-color: #2a2a2a;
+	color: white;
+}
+
+button {
+	background-color: #212529;
+	color: #fff;
+	padding: 10px 20px;
+	border-radius: 5px;
+	border: none;
+	cursor: pointer;
+	transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+	background-color: #343a40;
+}
+</style>
+</head>
+<body>
+	<main>
+		<section class="py-5 text-center container">
+			<div class="row py-lg-5">
+				<div class="col-lg-6 col-md-8 mx-auto">
+					<h1 class="fw-light">WHITELABELSURVEY</h1>
+					<p class="fw-light">세상의 모든 추천. 어떤 것을 찾고 싶으신가요?</p>
+				</div>
+			</div>
+		</section>
+	<section class="py-5 text-center container">
+         <div class="container">
+            <div>
+               <div style="width: 100%; margin: 0 auto;">
+				   <div class="row flex-column">
+				      <div>
+				         <h2>WhiteLabel <br> Flight</h2>
+				         <br><br>
+				         	<div th:each="result : ${sky}" th:if="${result == null}" class="card w-100 h-50">
+				         		<p>검색 결과가 없습니다.</p>
+				         	</div>
+				         <div class="card-deck">
+				            <div th:each="result : ${sky}" th:if="${result != null}" class="card w-100 h-50">
+				               <div class="card-body" style="height: 237px">
+				                  <div class="row">
+				                     <div class="col-2">
+				                     <br>
+				                     <br>
+										<img th:if="${result.logo} == null" src="http://ibb.co/2j8GK13" alt="Default Image" />
+				                        <img th:if="${result.logo} != null" th:src="${result.logo}" th:value="${result.logo}"/>
+				                        <h5  style="color: black;" th:text="${result.airLineName}" th:value="${result.airLineName}"></h5>
+				                        
+				                     </div> 
+				                     <div class="col-3">
+				                     <br>
+				                     <br>
+				                        <p>
+				                           <span style="color: black;" >Departure Code: </span><span th:text="${result.depCode}" style="color: black;"  th:value="${result.depCode}"></span><br>
+				                           <span style="color: black;">Departure Date: </span><span th:text="${result.depDate}"  style="color: black;" th:value="${result.depDate}"></span><br>
+				                        </p>
+				                     </div>
+				                     <div class="col-3">
+				                     <br>
+				                     <br>
+				                            <span style="color: black;">Duration: </span><span th:text="${result.duration}" style="color: black;"  th:value="${result.duration}"></span><br>
+									        <span  style="color: black;" th:if="${result.viaCode != '직항'}"><span style="color: black;" th:text="'Via code: '+${result.viaCode}" th:value="${result.viaCode}"></span></span> 
+									        <span th:if="${result.viaCode == '직항'}"></span><br>
+									        <span style="color: black;"  th:if="${result.viaDateTime != '직항'}"><span style="color: black;" th:text="'Via date time: '+${result.viaDateTime}" th:value="${result.viaDateTime}"></span></span> 
+									        <span th:if="${result.viaDateTime == '직항'}"></span><br>
+				                     </div>   
+				                     <div class="col-3"> 
+				                     <br>
+				                     <br> 
+				                           <span style="color: black;">Arrival Date: </span><span style="color: black;" th:text="${result.arrDate}" th:value="${result.arrDate}"></span><br>
+				                           <span style="color: black;">Arrival Code: </span><span style="color: black;" th:text="${result.arrCode}" th:value="${result.arrCode}"></span><br>
+				                           <span style="color: black;">Price: </span><span style="color: black;" th:text="${result.price}" th:value="${result.price}"></span><br>
+				                     </div>   
+				                     <div class="col-1"> 
+				                     <br>
+				                     <br>
+				                     <br>
+				                     <br>    
+				                        <button class="btn btn-secondary my-2 my-sm-0"
+											onclick="openMap(this)"
+											th:data-logo="${result.logo}"
+											th:data-name="${result.airLineName}"
+											th:data-price="${result.price}"
+											th:data-duration="${result.duration}"
+											th:data-depDate="${result.depDate}"
+											th:data-depCode="${result.depCode}"
+											th:data-arrDate="${result.arrDate}"
+											th:data-arrCode="${result.arrCode}"
+											th:data-viaCode="${result.viaCode}"
+											th:data-viaDateTime="${result.viaDateTime}">
+											Payment</button>
+										<script>
+									    // 버튼이 위치한 부분에서 dto 객체를 가져와서 data에 저장
+									   
+									
+									    function openMap(button) {
+									        const logo = encodeURIComponent(button.getAttribute("data-logo"));
+									        const name = encodeURIComponent(button.getAttribute("data-name"));
+									        const price = encodeURIComponent(button.getAttribute("data-price"));
+									        const duration = encodeURIComponent(button.getAttribute("data-duration"));
+									        const depDate = encodeURIComponent(button.getAttribute("data-depDate"));
+									        const depCode = encodeURIComponent(button.getAttribute("data-depCode"));
+									        const arrDate = encodeURIComponent(button.getAttribute("data-arrDate"));
+									        const viaDateTime = encodeURIComponent(button.getAttribute("data-viaDateTime"));
+									        const arrCode = encodeURIComponent(button.getAttribute("data-arrCode"));
+									        const viaCode = encodeURIComponent(button.getAttribute("data-viaCode"));
+									        const url = '/whitelabel/skyPayment?logo=' + logo + '&price=' + price + '&duration=' + duration
+									        				+ '&depCode=' + depCode + '&depDate=' + depDate + '&arrDate=' + arrDate 
+									        				+ '&arrCode=' + arrCode + '&viaCode=' + viaCode + '&viaDateTime=' + viaDateTime
+									        				+ '&name=' + name;
+									        				
+									        window.location.href = url;
+									    }
+									  
+										</script>
+				                     </div>
+				                  </div>
+				               </div>
+				            </div>
+				         </div>
+				      </div>
+				   </div>
+				</div>
+            </div>
+         </div>
+      
+   </section>	
+		
+		
+
+	</main>
+
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+		crossorigin="anonymous"></script>
+		
+		
+</body>
+<!-- 헤푸찢 세트-->
+<script>
+   includeHTML(function () {
+      includeRouter(function () {
+         // do something in the future
+      });
+   });
+</script>
+</html>
+
