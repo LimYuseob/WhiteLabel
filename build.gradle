@@ -48,7 +48,7 @@ dependencies {
 	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 
 	//kobis
-	//implementation files('kobis-opcl-rest-v1.0.jar')
+	implementation files('./libs/kobis-opcl-rest-v1.0.jar')
 	
 	implementation 'com.google.guava:guava:30.1.1-jre'
 	
