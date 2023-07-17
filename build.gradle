@@ -44,6 +44,7 @@ dependencies {
 
 	//소셜로그인 OAuth 의존성 추가
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
 	//json
 	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 

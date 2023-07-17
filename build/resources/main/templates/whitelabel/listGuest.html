@@ -1,47 +1,66 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html" lang="en">
 <head>
 
-<!--헤푸찢-->
-   <script>
-      function includeHTML(callback) {
-         var z, i, elmnt, file, xhr;
-         /*loop through a collection of all HTML elements:*/
-         z = document.getElementsByTagName('*');
-         for (i = 0; i < z.length; i++) {
-            elmnt = z[i];
-            /*search for elements with a certain atrribute:*/
-            file = elmnt.getAttribute('include-html');
-            //console.log(file);
-            if (file) {
-               /*make an HTTP request using the attribute value as the file name:*/
-               xhr = new XMLHttpRequest();
-               xhr.onreadystatechange = function () {
-                  if (this.readyState == 4) {
-                     if (this.status == 200) {
-                        elmnt.innerHTML = this.responseText;
-                     }
-                     if (this.status == 404) {
-                        elmnt.innerHTML = 'Page not found.';
-                     }
-                     /*remove the attribute, and call this function once more:*/
-                     elmnt.removeAttribute('include-html');
-                     includeHTML(callback);
-                  }
-               }
-               xhr.open('GET', file, true);
-               xhr.send();
-               /*exit the function:*/
-               return;
-            }
-         }
-         setTimeout(function () {
-            callback();
-         }, 0);
-      }
-   </script>
+    <div class="collapse bg-dark" id="navbarHeader">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-md-7 py-4">
+                    <h4 class="text-white">About</h4>
+                </div>
+                <div class="col-sm-4 offset-md-1 py-4">
+                    <h4 class="text-white">Contact</h4>
+                    <ul class="list-unstyled">
+                        <!--                        로그인 되어있을 때 마이페이지 버튼으로 변경하는 로직임-->
 
-	<!--    다크모드 구현-->
+
+                        <!-- 로그인 전  -->
+                        <li class="check"  sec:authorize="isAnonymous()">
+                            <button onclick="window.location.href='/whitelabel/loginPage'" class="text-white">Sign in</button>
+                        </li>
+                        <li class="check"  sec:authorize="isAnonymous()">
+                            <button onclick="window.location.href='/whitelabel/join'" class="text-white">Join</button>
+                        </li>
+                        <!-- 로그인 후 -->
+                        <li class="check2" sec:authorize="isAuthenticated()">
+                            <button onclick="window.location.href='/whitelabel/logout'" class="text-white">log out</button>
+                        </li>
+                        <li class="check2"  sec:authorize="isAuthenticated()">
+                            <button onclick="window.location.href='/whitelabel/myPage'" class="text-white">my page</button>
+                        </li>
+
+                        <li>
+                            <button onclick="toggleDarkMode()" id="button">
+                                <span id="modeText" style="color: white">Dark Mode</span>
+                            </button>
+                        </li>
+
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="navbar navbar-dark bg-dark shadow-sm" style="margin-bottom: 0px">
+        <div class="container">
+            <a href="/" class="navbar-brand d-flex align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+                     stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2"
+                     viewBox="0 0 24 24">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                    <circle cx="12" cy="13" r="4"/>
+                </svg>
+                <strong>WhiteLabelSurvey</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader"
+                    aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </div>
+
+    <!--    다크모드 구현-->
     <script>
         function toggleDarkMode() {
             var body = document.body;
@@ -86,7 +105,6 @@
             updateNavbar();
         }
     </script>
-
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
@@ -234,37 +252,37 @@ button:hover {
 					id="collapseBtn" style="margin-bottom: 13px">경기</button>
 
 				<div class="collapse collapse-menu" id="collapseMenu">
-					<a class="collapse-item" href="/whitelabel/listAPI?search=가평군">가평군</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=고양시">고양시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=과천시">과천시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=광명시">광명시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=광주시">광주시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=구리시">구리시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=군포시">군포시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=김포시">김포시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=남양주시">남양주시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=동두천시">동두천시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=부천시">부천시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=성남시">성남시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=수원시">수원시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=시흥시">시흥시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=안산시">안산시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=안성시">안성시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=안양시">안양시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=양주시">양주시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=양평군">양평군</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=여주시">여주시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=연천군">연천군</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=오산시">오산시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=용인시">용인시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=의왕시">의왕시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=의정부시">의정부시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=이천시">이천시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=파주시">파주시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=평택시">평택시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=포천시">포천시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=하남시">하남시</a>
-					<a class="collapse-item" href="/whitelabel/listAPI?search=화성시">화성시</a>
+                    <a class="collapse-item" href="/listAPI?search=가평군">가평군</a>
+                    <a class="collapse-item" href="/listAPI?search=고양시">고양시</a>
+                    <a class="collapse-item" href="/listAPI?search=과천시">과천시</a>
+                    <a class="collapse-item" href="/listAPI?search=광명시">광명시</a>
+					<a class="collapse-item" href="/listAPI?search=광주시">광주시</a>
+					<a class="collapse-item" href="/listAPI?search=구리시">구리시</a>
+					<a class="collapse-item" href="/listAPI?search=군포시">군포시</a>
+					<a class="collapse-item" href="/listAPI?search=김포시">김포시</a>
+					<a class="collapse-item" href="/listAPI?search=남양주시">남양주시</a>
+					<a class="collapse-item" href="/listAPI?search=동두천시">동두천시</a>
+					<a class="collapse-item" href="/listAPI?search=부천시">부천시</a>
+					<a class="collapse-item" href="/listAPI?search=성남시">성남시</a>
+					<a class="collapse-item" href="/listAPI?search=수원시">수원시</a>
+					<a class="collapse-item" href="/listAPI?search=시흥시">시흥시</a>
+					<a class="collapse-item" href="/listAPI?search=안산시">안산시</a>
+					<a class="collapse-item" href="/listAPI?search=안성시">안성시</a>
+					<a class="collapse-item" href="/listAPI?search=안양시">안양시</a>
+					<a class="collapse-item" href="/listAPI?search=양주시">양주시</a>
+					<a class="collapse-item" href="/listAPI?search=양평군">양평군</a>
+					<a class="collapse-item" href="/listAPI?search=여주시">여주시</a>
+					<a class="collapse-item" href="/listAPI?search=연천군">연천군</a>
+					<a class="collapse-item" href="/listAPI?search=오산시">오산시</a>
+					<a class="collapse-item" href="/listAPI?search=용인시">용인시</a>
+					<a class="collapse-item" href="/listAPI?search=의왕시">의왕시</a>
+					<a class="collapse-item" href="/listAPI?search=의정부시">의정부시</a>
+					<a class="collapse-item" href="/listAPI?search=이천시">이천시</a>
+					<a class="collapse-item" href="/listAPI?search=파주시">파주시</a>
+					<a class="collapse-item" href="/listAPI?search=평택시">평택시</a>
+					<a class="collapse-item" href="/listAPI?search=포천시">포천시</a>
+					<a class="collapse-item" href="/listAPI?search=하남시">하남시</a>
+					<a class="collapse-item" href="/listAPI?search=화성시">화성시</a>
 				</div>
 			</section>
 			<div class="row">
@@ -293,12 +311,4 @@ button:hover {
 		crossorigin="anonymous"></script>
 		
 </body>
-<!-- 헤푸찢 세트-->
-<script>
-   includeHTML(function () {
-      includeRouter(function () {
-         // do something in the future
-      });
-   });
-</script>
 </html>

@@ -41,9 +41,9 @@ public class SkyController {
 	private KakaoPayService kakaoPayService;
 	
 	@GetMapping("/skySearch2")
-	private void skySearch() {
-		// TODO Auto-generated method stub
+	private String skySearch() {
 
+		return "whitelabel/skySearch2";
 	}
 	
 	

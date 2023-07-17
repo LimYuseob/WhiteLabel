@@ -8,7 +8,6 @@
             <div class="row">
                 <div class="col-sm-8 col-md-7 py-4">
                     <h4 class="text-white">About</h4>
-                    <p class="text-muted">나만 아는 이스터에그 ㅎㅎ</p>
                 </div>
                 <div class="col-sm-4 offset-md-1 py-4">
                     <h4 class="text-white">Contact</h4>
@@ -45,7 +44,7 @@
     </div>
     <div class="navbar navbar-dark bg-dark shadow-sm" style="margin-bottom: 0px">
         <div class="container">
-            <a href="/whitelabel/index" class="navbar-brand d-flex align-items-center">
+            <a href="/" class="navbar-brand d-flex align-items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
                      stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2"
                      viewBox="0 0 24 24">
@@ -144,12 +143,11 @@
         <div class="container">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
                 <div class="col">
-                    <form th:action="@{/whitelabel/listGuest}" th:method="post" style="margin-left: 70px;">
+                    <form th:action="@{/listGuest}" th:method="post" style="margin-left: 70px;">
                         <button type="submit" class="btn btn-sm btn-outline-secondary">
                             <div class="card shadow-sm">
                                 <div class="card-body">
-                                    <img class="bd-placeholder-img card-img-top" src="/img/mat-jip.jpg" width="100%" height="225">
-                                    <p class="card-text">맛집 추천</p>
+                                    <img class="bd-placeholder-img card-img-top" src="/img/jmt.png" width="100%" height="225">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <p th:text="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"></p>
                                     </div>
@@ -159,12 +157,11 @@
                     </form>
                 </div>
                 <div class="col">
-                    <form th:action="@{/whitelabel/movieDetail}" th:method="post" style="margin-left: 70px;">
+                    <form th:action="@{/movieDetail}" th:method="post" style="margin-left: 70px;">
                         <button type="submit" class="btn btn-sm btn-outline-secondary" >
                             <div class="card shadow-sm">
                                 <div class="card-body" >
-                                    <img class="bd-placeholder-img card-img-top" width="100%" height="225"  src="/img/movie.jpg" >
-                                        <p class="card-text">영화 추천</p>
+                                    <img class="bd-placeholder-img card-img-top" width="100%" height="225"  src="/img/movie.png" >
                                         <div class="d-flex justify-content-between align-items-center">
                                             <p th:text="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"></p>
                                         </div>
@@ -179,8 +176,7 @@
                             <div class="card shadow-sm">
                                 <div class="card-body" >
                                     <img class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                         src="/img/priceline.jpg" >
-                                        <p class="card-text">비행기 추천</p>
+                                         src="/img/sky.png" >
                                         <div class="d-flex justify-content-between align-items-center">
                                             <p th:text="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"></p>
                                         </div>
@@ -217,8 +213,7 @@
             <button type="button">Back to top</button>
 
         </p>
-        <img src="/img/QR.jpg" alt="QR code for donation" class="qr-code">
-        <p style="color: darkgray;" class="mb-1">© 2012-2023 OP.GG. OP.GG isn’t endorsed by Riot Games and doesn’t reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.</p>
+        <p style="color: darkgray;" class="mb-1">© 2023 Uijeongbu Green Academy Project 2Jo</p>
     </div>
 
 

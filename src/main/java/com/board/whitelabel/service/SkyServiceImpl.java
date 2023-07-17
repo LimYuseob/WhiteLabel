@@ -53,7 +53,7 @@ public class SkyServiceImpl implements SkyService {
 						+ "&cabin_class="+cabinClass
 						+ "&origin_airport_code="+origin
 						+ "&destination_airport_code="+destination))
-				.header("X-RapidAPI-Key", "0ae2a0cb4amsh0f7f7e3004dc6e2p12aa27jsn6887881a523a")
+				.header("X-RapidAPI-Key", "3690ee9c27mshc979a1e839677f1p14c4cfjsn275ce096c6b6")
 				.header("X-RapidAPI-Host", "priceline-com-provider.p.rapidapi.com")
 				.method("GET", HttpRequest.BodyPublishers.noBody())
 				.build();

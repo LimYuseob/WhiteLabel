@@ -30,54 +30,56 @@ import lombok.RequiredArgsConstructor;
 import com.board.whitelabel.entity.Member;
 
 @Controller
-@RequestMapping("/whitelabel")
+@RequestMapping("/")
 @RequiredArgsConstructor
 public class WhiteLabelController {
 
 	@Qualifier("getAPI")
 	@Autowired(required = true)
 	private GetAPIService getAPIService;
-	
-	@GetMapping({"/index","/"})
+
+	@GetMapping
 	public String index(){
 		
-		return "whitelabel/index";
+		return "index";
 	}
 	
-	@GetMapping("/listGuest")
-	public void list() {
+	@GetMapping("listGuest")
+	public String list() {
 
+		return "whitelabel/listGuest";
 	}
 	
-	@PostMapping("/listGuest")
+	@PostMapping("listGuest")
 	public void getList() {
 		
 	}
 
-	@GetMapping("/listAPI")
+	@GetMapping("listAPI")
 	public void jmt(@RequestParam("search") String search, Model model) throws ParseException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException{
 	       
 		getAPIService.getAPI(search, model);
 			
 	}
 	
-	@GetMapping("/redirect")
+	@GetMapping("redirect")
 	public String redirect() {
-		return "redirect:/whitelabel/listGuest";
+		return "redirect:/listGuest";
 	}
 	
-	@GetMapping("/mapTest")
+	@GetMapping("mapTest")
 	public void map() {
 		
 	}
 	
-	@GetMapping("/movieDetail")
-	public void getMovie() {
-		
+	@GetMapping("movieDetail")
+	public void getMovie(){
+
+
 	}
 	
-	@PostMapping("/movieDetail")
-	public void geMovie(Model model) throws ParseException {
+	@PostMapping("movieDetail")
+	public String geMovie(Model model) throws ParseException {
 		
 		Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
@@ -85,50 +87,36 @@ public class WhiteLabelController {
         String date1 = String.valueOf((Long.parseLong(getDate) - 1));
         
 		getAPIService.getMovieAPI(date1, model);
+
+		return "whitelabel/movieDetail";
 	}
 	
-	@GetMapping("/naverSearch")
-	public void movieSearch(@RequestParam("search") String search, Model model) throws ParseException{
+	@GetMapping("naverSearch")
+	public String movieSearch(@RequestParam("search") String search, Model model) throws ParseException{
 		
 		model.addAttribute("getMovieAPI", getAPIService.getMovieSearchAPI(search));
+
+		return "whitelabel/naverSearch";
 		
 	}
 	
-	@PostMapping("/detailPage")
-	public void movie(@RequestParam("search") String search, Model model) throws ParseException {
+	@PostMapping("detailPage")
+	public String movie(@RequestParam("searchDay") String searchDay, Model model) throws ParseException {
 		
 		DateFormat df 	= new SimpleDateFormat("yyyy-MM-dd");
 		DateFormat df2	= new SimpleDateFormat("yyyyMMdd");
 		
 		try {
-			Date d = df.parse(search);
+			Date d = df.parse(searchDay);
 			String s_daily = df2.format(d);
 			System.out.println("날짜변환=====: " + s_daily);
 			getAPIService.getMovieAPI(s_daily, model);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
+		return "whitelabel/detailPage";
 	}
 	
-	 @PostMapping("/")
-	    public String home(Member loginMember, Model model, HttpServletRequest request) {
-	        if(loginMember == null) {
-	        	System.out.println("loginMember == nul ");
-	            return "whitelabel/index";
-	        }
-	        //세션이 유지되면 다시 홈으로 보낸다.
-	        model.addAttribute("member",loginMember);
 
-	        //어노테이션 없는 일반 세션 코드 적용..
-	        HttpSession session = request.getSession(false);
-	        if(session!= null) {
-	        	System.out.println("session!=null");
-	            return "whitelabel/index";
-	        }
-
-	        return "whitelabel/index";
-	    }
-	 
-	 
 	 
 }
