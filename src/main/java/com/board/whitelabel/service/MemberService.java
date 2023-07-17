@@ -74,6 +74,7 @@ public class MemberService implements UserDetailsService {
         Member member = memberRepository.findByEmail(memberDTO.getEmail());
 
         member.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
+        member.setLoginId(memberDTO.getLoginId());
         member.setName(memberDTO.getName());
         member.setEmail(memberDTO.getEmail());
         member.setPhone(memberDTO.getPhone());
