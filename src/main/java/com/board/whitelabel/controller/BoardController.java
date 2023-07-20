@@ -92,7 +92,7 @@ public class BoardController {
 		String dbid = memberRS.getEmail();
 
 		if (session == null) {
-			return "whitelabel/board";
+			return "redirect:/whitelabel/board";
 		}
 
 			Member member = (Member) session.getAttribute("member");
@@ -110,17 +110,16 @@ public class BoardController {
 
 			return "whitelabel/modify";
 
-		} else if(check != dbid) {
-			// 작성자 정보 불일치
-			return "whitelabel/board";
 		}
-		return null;
+			// 작성자 정보 불일치
+			return "redirect:/whitelabel/board";
+
 
 	}
 
-	@PostMapping("/modify")
+	@PostMapping("/modifyPo")
 	public String postModify(BoardDTO dto, @ModelAttribute("requestDTO") PageRequestDTO requestDTO,
-						 RedirectAttributes redirectAttributes, HttpSession session){
+						 RedirectAttributes redirectAttributes){
 
 
 		service.modify(dto);
@@ -137,7 +136,7 @@ public class BoardController {
 	}
 
 	@GetMapping("/remove")
-	public String remove(Long bno, Model model) {
+	public String remove(Long bno) {
 		System.out.println("remove실행");
 		service.remove(bno);
 

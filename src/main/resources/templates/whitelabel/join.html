@@ -116,7 +116,8 @@
                                                              class="form-control" id="email" name="email"
                                                              style="margin-bottom: 3px"
                                                              placeholder="이메일을 입력해 주세요." required>
-                    <button type="button" id="sendEmailNB" name="sendEmailNB" class="btn btn-primary btn-sm btn-block">
+                    <button type="button" id="sendEmailNB" name="sendEmailNB"
+                            class="btn btn-primary btn-sm btn-block">
                         인증번호 발송
                     </button>
                 </div>
@@ -164,19 +165,24 @@
                 </button>
             </form>
             <script>
-                var passwordInput = $('input[type=password]');
-                var checkId = $("#checkId");
-                var sendEmailNB = $("#sendEmailNB");
-                var checkEmailNB = $("#checkEmailNBFine");
-                var passwordOk = $("#alert-success");
-                var passwordNo = $("#alert-danger");
+                const passwordInput = $('input[type=password]');
+                const checkId = document.getElementById("checkId");
+                const sendEmailNB = document.getElementById("sendEmailNB");
+                const checkEmailNB = document.getElementById("checkEmailNBFine");
+                const passwordOk = $("#alert-success");
+                const passwordNo = $("#alert-danger");
+                const joinBtn = document.getElementById("joinFine");
 
                 passwordOk.hide();
                 passwordNo.hide();
+                checkEmailNB.disabled = true;
+                sendEmailNB.disabled = true;
+                joinBtn.disabled = true;
 
-                $(passwordInput).keyup(function () {
-                    var pwd1 = $("#password").val();
-                    var pwd2 = $("#inputPasswordCheck").val();
+                $(passwordInput).keyup(function (passCheck) {
+                    let pwd1 = $("#password").val();
+                    let pwd2 = $("#inputPasswordCheck").val();
+                    passwordNo.hide();
                     if (pwd1 !== "" || pwd2 !== "") {
                         if (pwd1 !== pwd2) {
                             passwordOk.hide();
@@ -184,12 +190,13 @@
                         } else if (pwd1 === pwd2) {
                             passwordOk.show();
                             passwordNo.hide();
+                            passCheck();
                         }
                     }
                 })
 
                 $(checkId).click(function () {
-                    var loginId = $('#loginId').val();
+                    let loginId = $('#loginId').val();
                     $.ajax({
                         url: '/whitelabel/checkId',
                         type: 'GET',
@@ -203,18 +210,19 @@
                                 alert('중복되거나 사용할 수 없는 ID입니다.');
                             } else {
                                 alert('사용 가능한 ID입니다.');
+                                sendEmailNB.disabled = false;
                             }
                         },
                         error: function () {
                             alert('ID 중복검사중 오류가 발생하였습니다. 다시 시도 해주세요.');
                             return false;
                         }
-                    });
+                    })
                 });
 
 
                 $(sendEmailNB).click(function () {
-                    var email = $('#email').val();
+                    let email = $('#email').val();
 
                     $.ajax({
                         url: '/whitelabel/sendEmailCheck',
@@ -230,6 +238,7 @@
                                 alert('인증번호 발송중 오류가 발생하였습니다. 다시 시도 해주세요.')
                             } else {
                                 alert('이메일로 인증번호를 발송하였습니다.')
+                                checkEmailNB.disabled = false;
                             }
                         },
                         error: function () {
@@ -239,7 +248,7 @@
                     })
                 });
                 $(checkEmailNB).click(function () {
-                    var emailNB = $('#checkEmailNB').val();
+                    let emailNB = $('#checkEmailNB').val();
                     $.ajax({
                         url: '/whitelabel/checkEmailNBFine',
                         type: 'POST',
@@ -254,10 +263,12 @@
                                 alert('인증번호가 틀리거나, 입력이 잘못되었습니다.')
                             } else {
                                 alert('인증이 완료 되었습니다.')
+                                joinBtn.disabled = false;
                             }
                         }
                     })
                 })
+
 
             </script>
         </div>

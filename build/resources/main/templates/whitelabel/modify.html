@@ -272,7 +272,7 @@ button:hover {
         </div>
     </section>
 	<div class="container">
-<form action="/whitelabel/modify" method="post">
+<form action="/whitelabel/modify" method="get">
 
 		<div class="form-group">
 		<label style="color: darkgray;">제목</label>
@@ -300,7 +300,7 @@ button:hover {
 		<script>
 			//JQuery에서 위에서 선언된 form 객체를 바인딩합니다
             var actionForm = $("form"); //form 태그 객체
-        
+
             //해당 폼에서 특정 CSS 클래스를 지정해서, 클릭이 발생하면 콜백함수를 지정하고
             //이벤트를 수행하도록 해볼게요
             $(".removeBtn").click(function(){
@@ -327,7 +327,7 @@ button:hover {
                 }
 
                 actionForm
-                    .attr("action", "/whitelabel/modify")
+                    .attr("action", "/whitelabel/modifyPo")
                     .attr("method","post")
                     .submit();
             });//모디파이 끝
@@ -357,10 +357,8 @@ button:hover {
 
         </script>
 	</div>
-	
-</main>		
+</main>
 
-		
 
 
 </body>

@@ -149,7 +149,7 @@ public class MemberController {
         MailDTO dto = memberService.createMailAndChangePassword(memberDTO.getEmail());
         memberService.mailSend(dto);
 
-        return "redirect:/whitelabel/index";
+        return "redirect:/whitelabel/loginPage";
     }
 
     @PostMapping("/sendEmailCheck")
