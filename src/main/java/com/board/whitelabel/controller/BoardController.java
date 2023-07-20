@@ -51,14 +51,14 @@ public class BoardController {
 
 		if(session == null){
 
-			return "redirect:/whitelabel/loginPage";
+			return "whitelabel/loginPage";
 		}
 
 		Member member = (Member) session.getAttribute("member");
 
 		model.addAttribute("member", member);
 
-		return "/whitelabel/register";
+		return "whitelabel/register";
 	}
 
 	@PostMapping("/register")
@@ -92,7 +92,7 @@ public class BoardController {
 		String dbid = memberRS.getEmail();
 
 		if (session == null) {
-			return "redirect:/whitelabel/board";
+			return "whitelabel/board";
 		}
 
 			Member member = (Member) session.getAttribute("member");
@@ -108,11 +108,11 @@ public class BoardController {
 
 			model.addAttribute("dto",boardDTO);
 
-			return "/whitelabel/modify";
+			return "whitelabel/modify";
 
 		} else if(check != dbid) {
 			// 작성자 정보 불일치
-			return "redirect:/whitelabel/board";
+			return "whitelabel/board";
 		}
 		return null;
 

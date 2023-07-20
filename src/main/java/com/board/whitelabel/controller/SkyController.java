@@ -121,7 +121,7 @@ public class SkyController {
 	    SkyRerv reservation = skyRervService.getReservation(ono);
 	    model.addAttribute("reservation", reservation);
 	    
-	    return "/whitelabel/detail";
+	    return "whitelabel/detail";
 	    		
 	}
 	

@@ -65,7 +65,7 @@ public class MemberController {
 
         if(session == null){
 
-            return "redirect:/whitelabel/myPage";
+            return "whitelabel/myPage";
         }
 
         Member member = (Member) session.getAttribute("member");
