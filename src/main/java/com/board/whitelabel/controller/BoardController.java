@@ -62,7 +62,7 @@ public class BoardController {
 	}
 
 	@PostMapping("/register")
-	public String getregister(BoardDTO dto) {
+	public String postregister(BoardDTO dto) {
 
 
 		System.out.println("id==="+dto.getLoginId());
