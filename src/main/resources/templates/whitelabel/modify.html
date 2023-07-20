@@ -257,7 +257,6 @@ button:hover {
 </style>
 </head>
 <body>
-<th:block>
 
 	<header include-html="/html/header.html"></header>
 <main>
@@ -273,7 +272,7 @@ button:hover {
         </div>
     </section>
 	<div class="container">
-<form action="/whitelabel/modify" method="post"> 
+<form action="/whitelabel/modify" method="post">
 
 		<div class="form-group">
 		<label style="color: darkgray;">제목</label>
@@ -287,7 +286,7 @@ button:hover {
 		</div>
 		<div class="form-group">
 			<label style="color: darkgray;">작성자</label> <input type="text" class="form-control"
-				name="loginId" th:value="${dto.getWriter()}" readonly>
+				name="writer" th:value="${dto.getWriter()}" readonly>
 		</div>
 		<br>
 </form>
@@ -364,7 +363,6 @@ button:hover {
 		
 
 
-</th:block>
 </body>
 </html>
 

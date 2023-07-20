@@ -82,7 +82,7 @@ public class BoardController {
 	}
 
 	@GetMapping("/modify")
-	public String getModify(PageRequestDTO pageRequestDTO, Long bno, Model model
+	public String getModify(@ModelAttribute("requestDTO") PageRequestDTO pageRequestDTO, Long bno, Model model
 			, HttpServletRequest request) {
 
 		HttpSession session = request.getSession();
@@ -112,7 +112,6 @@ public class BoardController {
 
 		} else if(check != dbid) {
 			// 작성자 정보 불일치
-			model.addAttribute("list",service.getList(pageRequestDTO));
 			return "whitelabel/board";
 		}
 		return null;
