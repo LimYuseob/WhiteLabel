@@ -25,7 +25,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ToString(exclude = "loginId")
 public class Board extends BaseEntity{
 
 	@Id
@@ -33,6 +32,8 @@ public class Board extends BaseEntity{
 	private Long bno;
 
 	private String title;
+
+	private String writer;
 
 	@Column(length = 10000)
 	private String content;
@@ -43,7 +44,7 @@ public class Board extends BaseEntity{
 	//해당 객체의 key를 찾아서 자동으로 테이블 구성을 합니다.
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	private Member loginId;
+	private Member member;
 
 
 

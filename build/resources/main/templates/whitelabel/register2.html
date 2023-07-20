@@ -210,8 +210,8 @@ button:hover {
                 </div>
             </div>
             <div class="form-group">
-            	<label style="color: darkgray;">login Id</label>
-                <input type="text" class="form-control" th:value="${member.loginId}" id="loginId" name="loginId" readonly>
+            	<label style="color: darkgray;">작성자</label>
+                <input type="text" class="form-control" th:value="${member.getEmail()}" id="email" name="email" readonly>
             </div>
 			<br>
             <button type="submit" style="background-color: darkgray;" class="btn btn-primary">등록하기</button>

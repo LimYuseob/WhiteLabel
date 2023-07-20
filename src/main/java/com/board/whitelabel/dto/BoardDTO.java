@@ -24,5 +24,6 @@ public class BoardDTO {
 	private String content;
 	private String regDate;
 	private String modDate;
-	
+	private String email;
+	private String writer;
 }

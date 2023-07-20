@@ -9,6 +9,7 @@ import com.board.whitelabel.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,15 +18,25 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService implements UserDetailsService {
+
+    @Value("${spring.mail.username}")
+    private String mailHost;
+
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
 
     private final MailSender mailSender;
+
+    private final MailDTO mailDTO = new MailDTO();
+
 
     public Member dtoToEntity(MemberDTO memberDTO){
 
@@ -56,6 +67,16 @@ public class MemberService implements UserDetailsService {
         memberRepository.save(member);
 
         return member;
+
+    }
+
+    public boolean checkId(String id){
+        Member memberId = memberRepository.findByLoginId(id);
+
+        if(memberId == null){
+            return false;
+        }
+        return true;
 
     }
     
@@ -146,11 +167,39 @@ public class MemberService implements UserDetailsService {
         message.setTo(mailDTO.getAddress());
         message.setSubject(mailDTO.getTitle());
         message.setText(mailDTO.getMessage());
-        message.setFrom("dladbtjq@naver.com");
-        message.setReplyTo("dladbtjq@naver.com");
+        message.setFrom(mailHost);
+        message.setReplyTo(mailHost);
         System.out.println("message"+message);
         mailSender.send(message);
 
+    }
+    public boolean checkEmailSend(String email){
+
+        if(email == null){
+            return false;
+        }
+            Random random = new Random();
+            mailDTO.setEmailCheckNB(random.nextInt(900000) + 100000);
+            SimpleMailMessage message= new SimpleMailMessage();
+            message.setTo(email);
+            message.setSubject("안녕하십니까.WhiteLabel 입니다.");
+            message.setText("인증번호는 "+ mailDTO.getEmailCheckNB() + "입니다.");
+            message.setFrom(mailHost);
+            message.setReplyTo(mailHost);
+            System.out.println("message"+message);
+            mailSender.send(message);
+
+
+
+            return true;
+    }
+
+    public boolean checkEmailNB(String emailNB){
+
+        if(emailNB.equals(String.valueOf(mailDTO.getEmailCheckNB()))){
+            return true;
+        }
+            return false;
     }
 
 }

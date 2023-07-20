@@ -7,7 +7,7 @@
 <body>
 	<div id="map" style="width: 500px; height: 400px;">
 		<script type="text/javascript"
-			src="//dapi.kakao.com/v2/maps/sdk.js?appkey=265e86e1135aa4e9e976471d64ee3d7c">
+			th:src="@{'//dapi.kakao.com/v2/maps/sdk.js?'+'appkey='+${@environment.getProperty('kakao.api.mapKey')}}">
 			
 		</script>
 		<script>

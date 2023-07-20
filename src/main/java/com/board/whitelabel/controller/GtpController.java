@@ -15,6 +15,9 @@ import com.board.whitelabel.entity.Member;
 
 import lombok.RequiredArgsConstructor;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 
 @Controller
 @RequestMapping("/whitelabel")
@@ -26,14 +29,21 @@ public class GtpController {
 		
 	
 	@PostMapping("/register2")
-	public String qu(@AuthenticationPrincipal MemberAdapter memberAdapter,GtpDTO2 question ,Model model) {
-		
-		Member member = memberAdapter.getMember();
-		
+	public String qu(GtpDTO2 question , Model model, HttpServletRequest request) {
+
+		HttpSession session = request.getSession();
+
 		model.addAttribute("texts",gtpS.callblog(question));
-		System.out.println("@@@@@@@@@@"+model);
-		model.addAttribute("member",member);
-		
+
+		if(session == null){
+
+			return "redirect:/whitelabel/loginPage";
+		}
+		Member member = (Member) session.getAttribute("member");
+
+		model.addAttribute("member", member);
+
+
 		return "/whitelabel/register2";
 	}
 	

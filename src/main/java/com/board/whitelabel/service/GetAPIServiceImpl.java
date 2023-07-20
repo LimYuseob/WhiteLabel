@@ -26,6 +26,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,12 @@ import kr.or.kobis.kobisopenapi.consumer.rest.exception.OpenAPIFault;
 @Service
 public class GetAPIServiceImpl implements GetAPIService {
 
-	
+	@Value("${matjip.api.key}")
+    private String matJipKey;
+
+    @Value("${movie.api.key}")
+    private String movieKey;
+
 	private ClientHttpRequestFactory getClientHttpRequestFactory() throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 	    org.apache.http.ssl.TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
 	    SSLContext sslContext = org.apache.http.ssl.SSLContexts.custom().loadTrustMaterial(null, acceptingTrustStrategy).build();
@@ -72,7 +78,7 @@ public class GetAPIServiceImpl implements GetAPIService {
 		
 		String url = "https://openapi.gg.go.kr/PlaceThatDoATasteyFoodSt";
 		UriComponents uri = UriComponentsBuilder.fromHttpUrl(url)
-							.queryParam("key", "f787195a59a444c39c7082b5ccbfe611")
+							.queryParam("key", matJipKey)
 							.queryParam("type", "json")
 							.queryParam("pIndex", "1")
 							.queryParam("pSize", "50")
@@ -125,14 +131,13 @@ public class GetAPIServiceImpl implements GetAPIService {
         
 		List<MovieSearchDTO> list = new ArrayList<>();
 		
-		String apiKey = "19C1078TR3C3XM50KXZ9";
 
         // 영화 검색
         String movieUrl = "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?"
         		+ "collection=kmdb_new2"
         		+ "&detail=Y"
         		+ "&title="+ URLEncoder.encode(search) 
-                + "&ServiceKey="+apiKey;
+                + "&ServiceKey="+movieKey;
                 
         String movieResult = getResult(movieUrl);
         
@@ -275,7 +280,7 @@ public class GetAPIServiceImpl implements GetAPIService {
                StringBuilder urlBuilder = new StringBuilder("http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&ServiceKey=");
 
                try {
-                  urlBuilder.append(URLEncoder.encode("19C1078TR3C3XM50KXZ9","UTF-8"));
+                  urlBuilder.append(URLEncoder.encode(movieKey,"UTF-8"));
                   urlBuilder.append("&" + URLEncoder.encode("title","UTF-8") + "=" + URLEncoder.encode((String) json.get("movieNm"), "UTF-8"));
                                                                            
                   URL url;

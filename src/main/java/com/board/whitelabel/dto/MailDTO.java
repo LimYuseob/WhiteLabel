@@ -12,4 +12,6 @@ public class MailDTO {
     private String address;
     private String title;
     private String message;
+
+    private int emailCheckNB;
 }

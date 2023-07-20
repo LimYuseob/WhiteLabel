@@ -15,6 +15,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -25,7 +26,10 @@ import com.board.whitelabel.repository.SkyRervRepository;
 
 @Service
 public class SkyServiceImpl implements SkyService {
-	
+
+	@Value("${sky.api.key}")
+	private String skyApiKey;
+
 	@Autowired
 	private SkyRervRepository skyRervRepository;
 	
@@ -53,7 +57,7 @@ public class SkyServiceImpl implements SkyService {
 						+ "&cabin_class="+cabinClass
 						+ "&origin_airport_code="+origin
 						+ "&destination_airport_code="+destination))
-				.header("X-RapidAPI-Key", "3690ee9c27mshc979a1e839677f1p14c4cfjsn275ce096c6b6")
+				.header("X-RapidAPI-Key", skyApiKey)
 				.header("X-RapidAPI-Host", "priceline-com-provider.p.rapidapi.com")
 				.method("GET", HttpRequest.BodyPublishers.noBody())
 				.build();

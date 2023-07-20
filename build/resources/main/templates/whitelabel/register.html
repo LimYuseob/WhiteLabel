@@ -213,8 +213,8 @@ button:hover {
                 <textarea class="form-control"   rows="10" name="content" required></textarea>
             </div>
             <div class="form-group">
-            	<label style="color: darkgray;">login Id</label>
-                <input type="text" class="form-control" th:value="${loginId}" id="loginId" name="loginId" readonly>
+            	<label style="color: darkgray;">Email</label>
+                <input type="text" class="form-control" th:value="${member.getEmail()}" id="email" name="email" readonly>
             </div>
 			<br>
             <button type="submit" class="btn btn-primary" style="background-color: darkgray;">등록하기</button>

@@ -7,6 +7,7 @@ import com.board.whitelabel.service.CustomOAuth2UserService;
 import com.board.whitelabel.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -47,6 +48,13 @@ public class MemberController {
 
     }
 
+    @GetMapping("/checkId")
+    @ResponseBody
+    public ResponseEntity<?> checkId(@RequestParam String id){
+        boolean checkId = memberService.checkId(id);
+        return ResponseEntity.ok(checkId);
+    }
+
     @GetMapping("/myPage")
     public String getMyPage(Model model, HttpServletRequest request) {
 
@@ -58,10 +66,6 @@ public class MemberController {
         if(session == null){
 
             return "redirect:/whitelabel/myPage";
-        } else if (session.getAttribute("member") == null) {
-            Member member = (Member) session.getAttribute("SNSmember");
-            model.addAttribute("member", member);
-            return "whitelabel/myPage";
         }
 
         Member member = (Member) session.getAttribute("member");
@@ -147,4 +151,24 @@ public class MemberController {
 
         return "redirect:/whitelabel/index";
     }
+
+    @PostMapping("/sendEmailCheck")
+    @ResponseBody
+    public ResponseEntity<?> sendEmailCheck(@RequestParam String email){
+
+        boolean emailCheck = memberService.checkEmailSend(email);
+
+        return ResponseEntity.ok(emailCheck);
+
+    }
+    @PostMapping("/checkEmailNBFine")
+    @ResponseBody
+    public ResponseEntity<?> checkEmailNBFine(@RequestParam String emailNB){
+
+        boolean checkEmailNB = memberService.checkEmailNB(emailNB);
+
+        return ResponseEntity.ok(checkEmailNB);
+
+    }
+
 }

@@ -8,7 +8,7 @@ import com.board.whitelabel.entity.Board;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
 	
-	@Query("select b, m from Board b left join b.loginId m where b.bno = :bno")
+	@Query("select b, m from Board b left join b.member m where b.bno = :bno")
 	Object getBoardByBno(@Param("bno") Long bno);
 	
 	

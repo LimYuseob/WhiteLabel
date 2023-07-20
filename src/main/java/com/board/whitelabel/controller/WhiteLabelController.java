@@ -40,72 +40,76 @@ public class WhiteLabelController {
 
 	@GetMapping
 	public String index(){
-		
+
 		return "index";
 	}
-	
+
 	@GetMapping("listGuest")
 	public String list() {
 
-		return "whitelabel/listGuest";
+		return "/whitelabel/listGuest";
 	}
-	
+
 	@PostMapping("listGuest")
-	public void getList() {
-		
+	public String getList() {
+
+		return "/whitelabel/listGuest";
 	}
 
 	@GetMapping("listAPI")
-	public void jmt(@RequestParam("search") String search, Model model) throws ParseException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException{
-	       
+	public String jmt(@RequestParam("search") String search, Model model) throws ParseException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException{
+
 		getAPIService.getAPI(search, model);
-			
+
+		return "/whitelabel/listAPI";
+
 	}
-	
-	@GetMapping("redirect")
+
+	@GetMapping("whitelabel/redirect")
 	public String redirect() {
 		return "redirect:/listGuest";
 	}
-	
+
 	@GetMapping("mapTest")
-	public void map() {
-		
+	public String map() {
+
+		return "whitelabel/mapTest";
 	}
-	
+
 	@GetMapping("movieDetail")
 	public void getMovie(){
 
 
 	}
-	
+
 	@PostMapping("movieDetail")
 	public String geMovie(Model model) throws ParseException {
-		
+
 		Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-        String getDate = formatter.format(date);
-        String date1 = String.valueOf((Long.parseLong(getDate) - 1));
-        
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+		String getDate = formatter.format(date);
+		String date1 = String.valueOf((Long.parseLong(getDate) - 1));
+
 		getAPIService.getMovieAPI(date1, model);
 
 		return "whitelabel/movieDetail";
 	}
-	
+
 	@GetMapping("naverSearch")
 	public String movieSearch(@RequestParam("search") String search, Model model) throws ParseException{
-		
+
 		model.addAttribute("getMovieAPI", getAPIService.getMovieSearchAPI(search));
 
 		return "whitelabel/naverSearch";
-		
+
 	}
-	
+
 	@PostMapping("detailPage")
 	public String movie(@RequestParam("searchDay") String searchDay, Model model) throws ParseException {
-		
+
 		DateFormat df 	= new SimpleDateFormat("yyyy-MM-dd");
 		DateFormat df2	= new SimpleDateFormat("yyyyMMdd");
-		
+
 		try {
 			Date d = df.parse(searchDay);
 			String s_daily = df2.format(d);
@@ -116,7 +120,7 @@ public class WhiteLabelController {
 		}
 		return "whitelabel/detailPage";
 	}
-	
 
-	 
+
+
 }
