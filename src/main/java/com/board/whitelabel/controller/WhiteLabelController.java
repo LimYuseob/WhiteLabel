@@ -27,7 +27,6 @@ import com.board.whitelabel.service.GetAPIService;
 
 import lombok.RequiredArgsConstructor;
 
-import com.board.whitelabel.entity.Member;
 
 @Controller
 @RequestMapping("/")
@@ -47,13 +46,13 @@ public class WhiteLabelController {
 	@GetMapping("listGuest")
 	public String list() {
 
-		return "/whitelabel/listGuest";
+		return "whitelabel/listGuest";
 	}
 
 	@PostMapping("listGuest")
 	public String getList() {
 
-		return "/whitelabel/listGuest";
+		return "whitelabel/listGuest";
 	}
 
 	@GetMapping("listAPI")
@@ -61,7 +60,7 @@ public class WhiteLabelController {
 
 		getAPIService.getAPI(search, model);
 
-		return "/whitelabel/listAPI";
+		return "whitelabel/listAPI";
 
 	}
 

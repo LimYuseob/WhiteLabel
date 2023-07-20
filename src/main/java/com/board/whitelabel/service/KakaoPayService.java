@@ -25,6 +25,9 @@ public class KakaoPayService {
     @Value("${kakao.api.PayKey}")
     private String kakaoPayKey;
 
+    @Value("${cloud.url}")
+    private String homeUrl;
+
     private static final String HOST = "https://kapi.kakao.com";
 
     private KakaoPayReadyDTO kakaoPayReadyDTO;
@@ -72,9 +75,9 @@ public class KakaoPayService {
         params.add("total_amount", String.valueOf(integerPrice));
         params.add("tax_free_amount", String.valueOf(integerPrice));
         params.add("payload", passengerJson);
-        params.add("approval_url", "http://localhost:8080/whitelabel/kakaoPaySuccess");
-        params.add("cancel_url", "http://localhost:8080/whitelabel/kakaoPayCancel");
-        params.add("fail_url", "http://localhost:8080/whitelabel/kakaoPaySuccessFail");
+        params.add("approval_url", homeUrl + "/whitelabel/kakaoPaySuccess");
+        params.add("cancel_url", homeUrl + "/whitelabel/kakaoPayCancel");
+        params.add("fail_url", homeUrl + "/whitelabel/kakaoPaySuccessFail");
 
         System.out.println("paramMap====" + params.toString());
 

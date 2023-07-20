@@ -35,7 +35,7 @@ public class BoardController {
 	private final BoardRepository boardRepository;
 
 
-	@GetMapping({"/board"})
+	@GetMapping("/board")
 	public String list(PageRequestDTO pageRequestDTO, Model model) {
 
 		model.addAttribute("list",service.getList(pageRequestDTO));
