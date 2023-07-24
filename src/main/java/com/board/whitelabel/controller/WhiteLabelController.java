@@ -43,9 +43,8 @@ public class WhiteLabelController {
 		return "index";
 	}
 
-
-	@PostMapping("listGuest")
-	public String getList() {
+	@GetMapping("listGuest")
+	public String getList(){
 
 		return "whitelabel/listGuest";
 	}

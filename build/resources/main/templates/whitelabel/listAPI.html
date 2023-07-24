@@ -348,7 +348,7 @@ button:hover {
 							<div th:each="dto : ${getAPI}" th:if="${dto == null}">
 						<script>
        					alert("해당 시군의 맛집 정보가 아직 없습니다.");
-        				window.location.href='/whitelabel/redirect';
+        				location.href=document.referrer;
     					</script>
 							</div>
 							<div th:if="${dto != null}" th:each="dto : ${getAPI}" class="col">

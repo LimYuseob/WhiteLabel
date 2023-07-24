@@ -116,12 +116,18 @@ public class MemberService implements UserDetailsService {
         return member;
     }
 
-    public Member MemberPwSearch(String loginId){
+    public boolean MemberPwSearch(String loginId, String email){
 
 
-          Member member = memberRepository.findByLoginId(loginId);
+          Member member = memberRepository.findByLoginIdAndEmail(loginId,email);
 
-        return member;
+          if(member == null){
+              return false;
+          }
+        MailDTO dto = createMailAndChangePassword(email);
+        mailSend(dto);
+
+        return true;
     }
 
     // 메일 내용을 생성하고 임시 비밀번호로 회원 비밀번호를 변경

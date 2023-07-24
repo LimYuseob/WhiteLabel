@@ -125,31 +125,14 @@ public class MemberController {
         return "whitelabel/SearchPw";
     }
 
-    @Transactional
     @PostMapping("/SearchPw")
-    public String SearchPw(MemberDTO memberDTO, Model model){
+    @ResponseBody
+    public ResponseEntity<?> SearchPw(@RequestParam String loginId,@RequestParam String email){
 
-        int errMsg = 0;
 
-        Member member = memberService.MemberPwSearch(memberDTO.getLoginId());
+        boolean member = memberService.MemberPwSearch(loginId,email);
 
-        if(member == null){
-            errMsg = 1;
-            model.addAttribute("errMsg", errMsg);
-
-            return "whitelabel/SearchPw";
-
-        } else if (!member.getEmail().equals(memberDTO.getEmail())) {
-            errMsg  = 2;
-            model.addAttribute("errMsg", errMsg);
-
-            return "whitelabel/SearchPw";
-        }
-
-        MailDTO dto = memberService.createMailAndChangePassword(memberDTO.getEmail());
-        memberService.mailSend(dto);
-
-        return "redirect:/whitelabel/loginPage";
+        return ResponseEntity.ok(member);
     }
 
     @PostMapping("/sendEmailCheck")
