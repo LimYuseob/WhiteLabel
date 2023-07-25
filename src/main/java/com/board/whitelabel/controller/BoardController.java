@@ -120,7 +120,7 @@ public class BoardController {
 
 	}
 
-	@PostMapping("/modifypo")
+	@PostMapping("/modify")
 	public String modify(BoardDTO dto, @ModelAttribute("requestDTO") PageRequestDTO requestDTO,
 						 RedirectAttributes redirectAttributes, HttpSession session){
 
