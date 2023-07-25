@@ -10,8 +10,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +34,7 @@ public class WhiteLabelController {
 	@Qualifier("getAPI")
 	@Autowired(required = true)
 	private GetAPIService getAPIService;
+
 
 	@GetMapping
 	public String index(){

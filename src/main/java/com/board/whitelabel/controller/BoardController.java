@@ -51,18 +51,18 @@ public class BoardController {
 		} else if (session.getAttribute("member") == null) {
 			Member member = (Member) session.getAttribute("SNSmember");
 			model.addAttribute("member", member);
-			return "/whitelabel/register";
+			return "whitelabel/register";
 		}
 
 		Member member = (Member) session.getAttribute("member");
 
 		model.addAttribute("member", member);
 
-		return "/whitelabel/register";
+		return "whitelabel/register";
 	}
 
-	@PostMapping("/register")
-	public String getregister(BoardDTO dto) {
+	@PostMapping("/registerpo")
+	public String postRegister(BoardDTO dto) {
 
 
 		System.out.println("id==="+dto.getLoginId());

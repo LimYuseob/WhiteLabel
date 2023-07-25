@@ -224,7 +224,7 @@ button:hover {
 		<h1 class="mt-4" style="color: darkgray;"> White Label 게시판 </h1>
 		<!-- 등록 버튼..이건 리스트 후에 작업 할것.. -->
 
-        <form th:action="@{/whitelabel/register}" th:method="post">
+        <form action="/whitelabel/registerpo" th:method="post">
             <div class="form-group">
                 <label style="color: darkgray;">Title</label>
                 <input type="text" class="form-control" name="title" placeholder="Enter Title" required>
