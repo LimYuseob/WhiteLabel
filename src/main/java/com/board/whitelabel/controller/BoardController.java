@@ -83,37 +83,42 @@ public class BoardController {
 
 
 
-//   @GetMapping("/modify")
-//   public String read(@ModelAttribute("requestDTO") PageRequestDTO pageRequestDTO, Long bno, Model model, @AuthenticationPrincipal MemberAdapter memberAdapter ,RedirectAttributes redirectAttributes) {
-//
-//      if (memberAdapter == null) {
-//         return "redirect:/whitelabel/board";
-//      }
-//      Object[] result = (Object[]) boardRepository.getBoardByBno(bno);
-//
-//
-//      Board board = (Board) result[0];
-//      Member member = (Member) result[1];
-//      String dbid = member.getLoginId();
-//      String check = memberAdapter.getUsername(); // Member 엔티티를 MemberAdapter 객체로 변환
-//
-//      if (check.equals(dbid)) {
-//         // 작성자 정보 반환
-//
-//         BoardDTO boardDTO = service.read(bno);
-//
-//         model.addAttribute("dto",boardDTO);
-//
-//         return "/whitelabel/modify";
-//
-//      } else if(check != dbid) {
-//         // 작성자 정보 불일치
-//         return "redirect:/whitelabel/board";
-//      }
-//      return null;
-//
-//
-//   }
+	@GetMapping("/modify")
+	public String read(@ModelAttribute("requestDTO") PageRequestDTO pageRequestDTO,HttpServletRequest request, Long bno, Model model, @AuthenticationPrincipal MemberAdapter memberAdapter ,RedirectAttributes redirectAttributes) {
+
+		HttpSession session = request.getSession();
+
+		if (session.getAttribute("member") == null) {
+			// 권한이 없는 경우
+			String alertMessage = "권한이 없습니다.";
+			model.addAttribute("alertMessage", alertMessage);
+			return "whitelabel/historyback";
+		}
+		Object[] result = (Object[]) boardRepository.getBoardByBno(bno);
+
+
+		Board board = (Board) result[0];
+		Member member = (Member) result[1];
+		String dbid = member.getLoginId();
+		String check = memberAdapter.getUsername(); // Member 엔티티를 MemberAdapter 객체로 변환
+
+		if (check.equals(dbid)) {
+			// 작성자 정보 반환
+
+			BoardDTO boardDTO = service.read(bno);
+
+			model.addAttribute("dto",boardDTO);
+
+			return "/whitelabel/modify";
+
+		} else if(check != dbid) {
+			// 작성자 정보 불일치
+			return "redirect:/whitelabel/board";
+		}
+		return null;
+
+
+	}
 
 	@PostMapping("/modifypo")
 	public String modify(BoardDTO dto, @ModelAttribute("requestDTO") PageRequestDTO requestDTO,
