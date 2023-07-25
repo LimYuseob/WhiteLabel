@@ -57,7 +57,7 @@ public class BoardRestController {
 
             model.addAttribute("dto",boardDTO);
 
-            return "window.location.href='whitelabel/modify'";
+            return "<script>window.location.href='whitelabel/modify'</script>";
 
         }
         // 작성자 정보 불일치
