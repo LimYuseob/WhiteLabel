@@ -5,7 +5,6 @@ import com.board.whitelabel.dto.BoardDTO;
 import com.board.whitelabel.dto.PageRequestDTO;
 import com.board.whitelabel.dto.PageResultDTO;
 import com.board.whitelabel.entity.Board;
-import com.board.whitelabel.entity.Member;
 
 public interface BoardService {
 
@@ -23,18 +22,18 @@ public interface BoardService {
 
 
 
-	PageResultDTO<BoardDTO, Object[]> getList(PageRequestDTO pageRequestDTO);
+	PageResultDTO<BoardDTO, Board> getList(PageRequestDTO pageRequestDTO);
 	//Entity --> DTO 로 변경하는 default 메서드 정의
 	//BoardDTO 객체 하나에 Member, Board, 댓글수를 모두 넣어야 하기때문에
 	//이 메서드는 파라미터 3개를 받아야합니다
-	default BoardDTO entityToDto(Board entity, Member member) {
+	default BoardDTO entityToDto(Board entity) {
 		//PageRequest객체 생성
 
 		BoardDTO dto = BoardDTO.builder()
 				.bno(entity.getBno())
 				.title(entity.getTitle())
 				.content(entity.getContent())
-				.writer(member.getEmail())
+				.writer(entity.getWriter())
 				.regDate(entity.getRegDate())
 				.modDate(entity.getModDate())
 				.build();
@@ -59,7 +58,12 @@ public interface BoardService {
 		//여기까지가 dto에서 사용자가 입력한 email설정 작업와료
 		//위 멤버객체를 Board에 writer로 참조(ref)를 걸어야합니다
 
-		Board board = Board.builder().bno(dto.getBno()).title(dto.getTitle()).writer(dto.getWriter()).content(dto.getContent()).build();
+		Board board = Board.builder()
+				.bno(dto.getBno())
+				.title(dto.getTitle())
+				.writer(dto.getWriter())
+				.content(dto.getContent())
+				.build();
 
 		return board;
 	}
@@ -70,5 +74,5 @@ public interface BoardService {
 	void remove(Long bno);
 
 	//글수정 메서드
-	void modify(BoardDTO boardDTO);
+	BoardDTO modify(BoardDTO boardDTO);
 }

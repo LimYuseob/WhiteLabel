@@ -272,7 +272,7 @@ button:hover {
         </div>
     </section>
 	<div class="container">
-<form action="/whitelabel/modify" method="get">
+<form action method>
 
 		<div class="form-group">
 		<label style="color: darkgray;">제목</label>
@@ -285,78 +285,47 @@ button:hover {
 			<textarea class="form-control" rows="15" name="content" >[[${dto.content}]]</textarea>
 		</div>
 		<div class="form-group">
-			<label style="color: darkgray;">작성자</label> <input type="text" class="form-control"
+			<label style="color: darkgray;">작성자</label> <input type="text" class="form-control" id="writer"
 				name="writer" th:value="${dto.getWriter()}" readonly>
 		</div>
-		<br>
+    <div style="margin-top: 5px">
+    <button	type="submit" id="modifyBtn" name="modifyBtn" class="btn btn-primary modifyBtn">글수정</button>
+    <button	type="button" id="removeBtn" name="removeBtn" class="btn btn-info removeBtn">글삭제</button>
+    <button	type="button" id="listBtn" name="listBtn" class="btn btn-info listBtn">글목록</button>
+    </div>
+
 </form>
-		<button	type="button" class="btn btn-primary modifyBtn">글수정</button>
-		<button	type="button" class="btn btn-info removeBtn">글삭제</button>
-		<button	type="button" class="btn btn-info listBtn">글목록</button>
-		
-		<br>
-		<br>
-		
-		<script>
-			//JQuery에서 위에서 선언된 form 객체를 바인딩합니다
-            var actionForm = $("form"); //form 태그 객체
-
-            //해당 폼에서 특정 CSS 클래스를 지정해서, 클릭이 발생하면 콜백함수를 지정하고
-            //이벤트를 수행하도록 해볼게요
-            $(".removeBtn").click(function(){
-				//위에서 지정한 폼객체(actionForm)의 속성을 조정해볼게요
-				//폼객체이기 때문에 JQuery에 보면 많은 속성과 메서드가 존재하는데
-				//지금은 속성 메서드 attr()을 이용해서 우리가 폼속성에 주는 값을 변경해 볼게요
-				
-            	if(!confirm("삭제하시겠습니까?")){
-                    return ;
-                }
-				
-                actionForm
-                .attr("action", "/whitelabel/remove")
-                .attr("method","get");
-
-                actionForm.submit();
-
-            });
-            //수정버튼 이벤트 등록 및 수행 작업
-            $(".modifyBtn").click(function() {
-
-                if(!confirm("수정하시겠습니까?")){
-                    return ;
-                }
-
-                actionForm
-                    .attr("action", "/whitelabel/modifypo")
-                    .attr("method","post")
-                    .submit();
-            });//모디파이 끝
-
-            $(".listBtn").click(function() {
-
-                //폼태그내의 input 태그 중 특정 태그를 찾는 방법
-                var page = $("input[name='page']");
-                var type = $("input[name='type']");
-                var keyword = $("input[name='keyword']");
-
-                actionForm.empty(); //form 태그의 모든 내용을 지우고
-
-                //폼 submit시 파라미터 전달 메서드 append()지정
-                actionForm.append(page);
-                actionForm.append(type);
-                actionForm.append(keyword);
-
-
-                actionForm
-                    .attr("action", "/whitelabel/board")
-                    .attr("method","get");
-
-                actionForm.submit();
-
-            })
-
-        </script>
 	</div>
+    <script>
+        const actionForm = $("form");
+        const removeBtn = document.getElementById("removeBtn");
+        const listBtn = document.getElementById("listBtn");
+        const modifyBtn = document.getElementById("modifyBtn");
+
+        $(modifyBtn).click(function () {
+            if(confirm("작성하신 글을 수정 하시겠습니까?")){
+                actionForm
+                        .attr("action","/whitelabel/modify")
+
+                        .attr("method","post");
+
+                actionForm.submit();
+            }else {
+            }
+            //modify버튼 끝
+        });
+        $(removeBtn).click(function(){
+            if(confirm("글을 삭제 하시겠습니까?")){
+                actionForm
+                    .attr("action", "/whitelabel/remove")
+                    .attr("method", "get")
+                actionForm.submit();
+            }
+        });//remove버튼 끝
+        $(listBtn).click(function(){
+            window.location.href="/whitelabel/board";
+        });//list버튼 끝
+    </script>
 </main>
 
 

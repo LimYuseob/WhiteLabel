@@ -1,10 +1,11 @@
 package com.board.whitelabel.service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import com.board.whitelabel.dto.PageRequestDTO;
 import com.board.whitelabel.dto.PageResultDTO;
-import com.fasterxml.jackson.databind.util.ArrayBuilders;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -14,7 +15,6 @@ import com.board.whitelabel.dto.BoardDTO;
 import com.board.whitelabel.entity.Board;
 import com.board.whitelabel.entity.Member;
 import com.board.whitelabel.repository.BoardRepository;
-import com.board.whitelabel.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -27,15 +27,17 @@ import java.util.function.Function;
 public class BoardServiceImpl implements BoardService{
 
 	private final BoardRepository boardRepository;
-	private final MemberRepository memberRepository;
+
+	private final HttpServletRequest request;
 
 	@Override
-	public PageResultDTO<BoardDTO, Object[]> getList(PageRequestDTO requestDTO) {
-		Pageable pageable = requestDTO.getPageable(Sort.by("bno").descending());
-		Page<Object[]> result = boardRepository.findAll(pageable)
-				.map(board -> new Object[]{board, board.getMember()});
+	public PageResultDTO<BoardDTO, Board> getList(PageRequestDTO requestDTO) {
 
-		Function<Object[], BoardDTO> fn = (entity->entityToDto((Board)entity[0], (Member)entity[1]));
+		Pageable pageable = requestDTO.getPageable(Sort.by("bno").descending());
+
+		Page<Board> result = boardRepository.findAll(pageable);
+
+		Function<Board, BoardDTO> fn = (entity -> entityToDto(entity));
 
 		return new PageResultDTO<>(result, fn);
 	}
@@ -46,15 +48,14 @@ public class BoardServiceImpl implements BoardService{
 	public void register(BoardDTO dto) {
 		log.info("신규등록 호출");
 
-		System.out.println("dto.email"+dto.getEmail());
-
-		Member member = memberRepository.findByEmail(dto.getEmail());
-		if(member == null) {
-			// 에러 처리
-			System.out.println("에러 null");
-		}
+		System.out.println("작성자 : "+ dto.getWriter());
 
 		Board board = dtoToEntity(dto);
+
+		HttpSession session = request.getSession();
+
+		Member member = (Member) session.getAttribute("member");
+
 		board.setMember(member);
 
 		boardRepository.save(board);
@@ -64,10 +65,9 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public BoardDTO read(Long bno) {
 
-		Object ob = boardRepository.getBoardByBno(bno);
-		Object[] arr  = (Object[]) ob;
+		Board result = boardRepository.getBoardByBno(bno);
 
-		return entityToDto((Board)arr[0], (Member)arr[1]);
+		return entityToDto(result);
 	}
 
 	@Transactional
@@ -81,9 +81,9 @@ public class BoardServiceImpl implements BoardService{
 
 	@Transactional
 	@Override
-	public void modify(BoardDTO boardDTO) {
+	public BoardDTO modify(BoardDTO boardDTO) {
 
-		Board board = boardRepository.getOne(boardDTO.getBno());
+		Board board = boardRepository.getBoardByBno(boardDTO.getBno());
 
 		if(board != null) {
 
@@ -92,6 +92,7 @@ public class BoardServiceImpl implements BoardService{
 
 			boardRepository.save(board);
 		}
+		return boardDTO;
 	}
 	//검색 조건을 추가하여, 검색에 매칭되는 Entity를 구성해서 getListPage()로 보낸다
 	//QueryDSL을 이용할 예정이라 리턴타입은 javax.persistant.page 객체로

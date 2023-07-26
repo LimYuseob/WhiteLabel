@@ -304,7 +304,7 @@ button:hover {
 					</th>
 					<td><a style="color: darkgray;" th:href="@{/whitelabel/read(bno=${dto.bno}, page=${list.page})}">[[${dto.title}]]</a></td>
 					<td style="color: darkgray;">[[${dto.writer}]]</td>
-					<td style="color: darkgray;">[[${dto.modDate}]]</td>
+					<td style="color: darkgray;">[[${dto.regDate}]]</td>
 				</tr>
 			</tbody>
 		</table>
@@ -344,25 +344,7 @@ button:hover {
             </div>
         </div>
 	</div>        
-       	<script th:Inline="javascript">
-       	//글 신규 등록 후 스크립트 처리 th:Inline 속성
-       	var msg = /*[[${msg}]]*/'';
-        console.log(msg);
-        
-        if(msg){
-        	$(".modal").modal();
-        }
-        
-        /* 모델에서 alertMessage 가져오기 */
-        var alertMessage = /*[[${alertMessage}]]*/'';
-        
-        /* alertMessage가 비어있지 않을 경우, alert 창 띄우기 */
-        if(alertMessage !== null) {
-            alert(alertMessage);
-        }
-        
-        
-        </script>
+
     
 
 </main>

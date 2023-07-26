@@ -1,17 +1,19 @@
 package com.board.whitelabel.repository;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.board.whitelabel.entity.Board;
 
+
 public interface BoardRepository extends JpaRepository<Board, Long> {
 	
-	@Query("select b, m from Board b left join b.member m where b.bno = :bno")
-	Object getBoardByBno(@Param("bno") Long bno);
-	
-	
+	@Query("select b from Board b  where b.bno =:bno")
+	Board getBoardByBno(@Param("bno") Long bno);
+
+
 	/*
 	 * LEFT JOIN 이용해서 관계 설정된 테이블에서 정보를 모두 가져온 후 가공작업을 합니다.
 	 * 이렇게 가공된 정보를 DTO에 담아서 View단으로 넘기면
