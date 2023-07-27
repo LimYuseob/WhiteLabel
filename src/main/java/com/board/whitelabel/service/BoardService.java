@@ -5,6 +5,7 @@ import com.board.whitelabel.dto.BoardDTO;
 import com.board.whitelabel.dto.PageRequestDTO;
 import com.board.whitelabel.dto.PageResultDTO;
 import com.board.whitelabel.entity.Board;
+import com.board.whitelabel.entity.Member;
 
 public interface BoardService {
 
@@ -57,6 +58,7 @@ public interface BoardService {
 	default Board dtoToEntity(BoardDTO dto) {
 		//여기까지가 dto에서 사용자가 입력한 email설정 작업와료
 		//위 멤버객체를 Board에 writer로 참조(ref)를 걸어야합니다
+
 
 		Board board = Board.builder()
 				.bno(dto.getBno())

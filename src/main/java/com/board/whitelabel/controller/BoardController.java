@@ -47,15 +47,11 @@ public class BoardController {
 		if(session == null){
 
 			return "redirect:/whitelabel/loginPage";
-		} else if (session.getAttribute("member") == null) {
-			Member member = (Member) session.getAttribute("SNSmember");
-			model.addAttribute("member", member);
-			return "whitelabel/register";
 		}
 
 		Member member = (Member) session.getAttribute("member");
-
-		model.addAttribute("member", member);
+		String writerId = member.getEmail().substring(0,member.getEmail().indexOf('@'));
+		model.addAttribute("writer", writerId);
 
 		return "whitelabel/register";
 	}
@@ -95,11 +91,11 @@ public class BoardController {
 
 		Board checkMember = boardRepository.getBoardByBno(boardDTO.getBno());
 		if(member == null){
-
 			return "redirect:"+referer;
 
-		}else if(member.getMno() != checkMember.getMember().getMno()){
-
+		}else if(!member.getMno().equals(checkMember.getMember().getMno())){
+			System.out.println("세션정보 : "+member.getMno());
+			System.out.println("레포지토리정보 : "+checkMember.getMember().getMno());
 			return "redirect:"+referer;
 
 		}
